@@ -2,3 +2,6 @@
 # Project exclude paths
 /out/
 .idea
+# Ignorar el archivo de entorno privado en cualquier subcarpeta
+**/DATABASE/.env
+.env
