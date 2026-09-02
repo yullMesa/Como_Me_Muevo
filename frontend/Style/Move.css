@@ -1,0 +1,98 @@
+/* Variables con la paleta exacta */
+:root {
+    --rojo-principal: #E21B23;
+    --rojo-oscuro: #C9141C;
+    --blanco: #FFFFFF;
+    --negro: #1F1F1F;
+    --gris-oscuro: #555555;
+    --gris-claro: #E5E5E5;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, sans-serif;
+    background-color: var(--blanco);
+}
+
+/* Estilos de la barra de navegación */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 48px;
+    background-color: var(--blanco);
+    border-bottom: 1px solid var(--gris-claro);
+}
+
+/* Logo */
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    width: 36px;
+    height: 36px;
+    background-color: var(--rojo-principal);
+    color: var(--blanco);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.logo-text h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--negro);
+    font-weight: 700;
+}
+
+.logo-text span {
+    font-size: 0.75rem;
+    color: var(--gris-oscuro);
+}
+
+/* Enlaces del menú */
+.nav-links {
+    display: flex;
+    gap: 28px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--gris-oscuro);
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding-bottom: 4px;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: var(--rojo-principal);
+}
+
+.nav-links a.active {
+    color: var(--rojo-principal);
+    border-bottom: 2px solid var(--rojo-principal);
+}
+
+/* Botón Iniciar Sesión */
+.btn-login {
+    background-color: var(--rojo-principal);
+    color: var(--blanco);
+    border: none;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-login:hover {
+    background-color: var(--rojo-oscuro);
+}
