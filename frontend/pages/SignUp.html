@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>¿Cómo Me Muevo? - Registro</title>
+    <link rel="stylesheet" href="../Style/Move.css">
+</head>
+<body class="signup-body">
+
+<div class="signup-container">
+    <!-- Lado izquierdo: La imagen original sin pixelarse -->
+    <div class="signup-left-space">
+        <img src="../Style/image/background.jpg" alt="Ilustración transporte" class="signup-img">
+    </div>
+
+    <!-- Lado derecho: Formulario de Registro -->
+    <div class="signup-right-form">
+        <div class="form-header">
+            <h2>Crea tu cuenta</h2>
+            <p>Regístrate para comenzar a moverte por la ciudad</p>
+        </div>
+
+        <form id="signupForm">
+            <div class="input-group">
+                <span class="input-icon">👤</span>
+                <input type="text" id="nombre" placeholder="Nombre completo" required>
+            </div>
+
+            <div class="input-group">
+                <span class="input-icon">✉️</span>
+                <input type="email" id="correo" placeholder="Correo electrónico" required>
+            </div>
+
+            <div class="input-group">
+                <span class="input-icon">📱</span>
+                <input type="tel" id="telefono" placeholder="Número de celular" required>
+            </div>
+
+            <div class="input-group">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="contrasena" placeholder="Contraseña" required>
+                <span class="toggle-password">👁️‍🗨️</span>
+            </div>
+
+            <div class="input-group">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="confirmarContrasena" placeholder="Confirmar contraseña" required>
+                <span class="toggle-password">👁️‍🗨️</span>
+            </div>
+
+            <div class="terms-group">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">Acepto los <a href="#">Términos y Condiciones</a> y la <a href="#">Política de Privacidad</a></label>
+            </div>
+
+            <button type="submit" class="btn-submit">Registrarse</button>
+
+            <p class="login-redirect">
+                ¿Ya tienes cuenta? <a href="Login.html">Inicia sesión</a>
+            </p>
+        </form>
+    </div>
+</div>
+
+<script type="module" src="../vanilla/SignUp.js"></script>
+</body>
+</html>

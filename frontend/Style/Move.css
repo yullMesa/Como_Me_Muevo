@@ -96,3 +96,189 @@ body {
 .btn-login:hover {
     background-color: var(--rojo-oscuro);
 }
+
+/* Contenedor de acciones del menú */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Botón secundario de Registro en el Navbar */
+.btn-register {
+    text-decoration: none;
+    color: var(--rojo-principal);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 8px 16px;
+    border: 1.5px solid var(--rojo-principal);
+    border-radius: 6px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-register:hover {
+    background-color: var(--rojo-principal);
+    color: var(--blanco);
+}
+
+
+/*-----------------------------------------------------*/
+/*Aquí empieza a generarse el estilo de signup */
+/*------------------------------------------------------*/
+/* Estilo exclusivo para la página de registro con fondo */
+/* Fondo general de la página de registro limpio */
+body.signup-body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #F8F9FA;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Contenedor tipo tarjeta dividida en dos */
+.signup-container {
+    display: flex;
+    width: 90%;
+    max-width: 1100px;
+    height: 85vh;
+    background: var(--blanco);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* Columna izquierda con la imagen ajustada completa */
+.signup-left-space {
+    flex: 1.1;
+    background-color: #FDF2F2; /* Un fondo suave que combine */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.signup-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Esto hace que se vea completa y no gigante ni cortada */
+}
+
+/* Columna derecha: Formulario */
+.signup-right-form {
+    flex: 0.9;
+    padding: 40px 45px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--blanco);
+    overflow-y: auto;
+}
+
+.form-header h2 {
+    margin: 0 0 6px 0;
+    font-size: 1.7rem;
+    color: var(--negro);
+    font-weight: 700;
+}
+
+.form-header p {
+    margin: 0 0 20px 0;
+    color: var(--gris-oscuro);
+    font-size: 0.88rem;
+}
+
+/* Inputs */
+.input-group {
+    position: relative;
+    margin-bottom: 14px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 11px 14px 11px 40px;
+    border: 1px solid var(--gris-claro);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    outline: none;
+    background-color: #FAFAFA;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.input-group input:focus {
+    border-color: var(--rojo-principal);
+    background-color: var(--blanco);
+}
+
+.input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.95rem;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+/* Términos */
+.terms-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--gris-oscuro);
+    margin-bottom: 18px;
+}
+
+.terms-group a {
+    color: var(--rojo-principal);
+    text-decoration: none;
+}
+
+.terms-group a:hover {
+    text-decoration: underline;
+}
+
+/* Botón */
+.btn-submit {
+    width: 100%;
+    padding: 11px;
+    background-color: var(--rojo-principal);
+    color: var(--blanco);
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-submit:hover {
+    background-color: var(--rojo-oscuro);
+}
+
+/* Redirección */
+.login-redirect {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.85rem;
+    color: var(--gris-oscuro);
+}
+
+.login-redirect a {
+    color: var(--rojo-principal);
+    text-decoration: none;
+    font-weight: 600;
+}

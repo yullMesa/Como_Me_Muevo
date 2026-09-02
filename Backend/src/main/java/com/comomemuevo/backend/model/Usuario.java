@@ -1,39 +1,40 @@
 package com.comomemuevo.backend.model;
 
 import jakarta.persistence.*;
+import java.util.UUID;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "usuarios") //
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
-    private String nombre;
+    private String nombre; //[cite: 2]
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false) //[cite: 2]
     private String correo;
 
-    @Column(nullable = false)
+    @Column(nullable = false) //[cite: 2]
     private String contrasena;
 
-    // Constructor vacío obligatorio para JPA
+    // Constructor vacío obligatorio para JPA[cite: 2]
     public Usuario() {}
 
-    // Constructor con parámetros
+    // Constructor con parámetros[cite: 2]
     public Usuario(String nombre, String correo, String contrasena) {
         this.nombre = nombre;
         this.correo = correo;
         this.contrasena = contrasena;
     }
 
-    // Getters y Setters
-    public Long getId() {
+    // Getters y Setters actualizados para UUID[cite: 2]
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -61,4 +62,3 @@ public class Usuario {
         this.contrasena = contrasena;
     }
 }
-
