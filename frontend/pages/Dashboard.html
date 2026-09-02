@@ -1,10 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Como Me Muevo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como Me Muevo - Panel Principal</title>
+    <link rel="stylesheet" href="../Style/Move.css">
 </head>
-<body>
+<body class="dashboard-body">
 
+<div class="app-container">
+    <!-- BARRA LATERAL (SIDEBAR) -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">?</div>
+            <div class="logo-text">
+                <h2>¿Cómo me muevo?</h2>
+                <span>Tu ciudad, más conectada</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-view="inicio">
+                <span class="icon">🏠</span> Inicio
+            </a>
+            <a href="#" class="nav-item" data-view="rutas">
+                <span class="icon">🗺️</span> Mis rutas
+            </a>
+            <a href="#" class="nav-item" data-view="viajes">
+                <span class="icon">🕒</span> Rutas realizadas
+            </a>
+            <a href="#" class="nav-item" data-view="reportes">
+                <span class="icon">📝</span> Reportes
+            </a>
+            <a href="#" class="nav-item" data-view="mis-reportes">
+                <span class="icon">🔔</span> Mis reportes
+            </a>
+            <a href="#" class="nav-item" data-view="notificaciones">
+                <span class="icon">💬</span> Notificaciones
+            </a>
+            <a href="#" class="nav-item" data-view="perfil">
+                <span class="icon">👤</span> Perfil
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="Login.html" class="nav-item logout">
+                <span class="icon">🚪</span> Cerrar sesión
+            </a>
+        </div>
+    </aside>
+
+    <!-- CONTENEDOR PRINCIPAL / DINÁMICO (SPA) -->
+    <main class="main-content">
+        <!-- Barra superior del Dashboard -->
+        <header class="dashboard-header">
+            <button id="menuToggle" class="menu-toggle">☰</button>
+            <div class="user-menu">
+                <span class="notification-badge">🔔 <span class="badge-count">1</span></span>
+                <span class="user-name" id="nombreUsuario">Cargando...</span>
+            </div>
+        </header>
+
+        <!-- Aquí se cargarán dinámicamente las vistas sin recargar la página -->
+        <div id="contentArea" class="content-area">
+            <!-- Por defecto cargará la vista de inicio -->
+        </div>
+    </main>
+</div>
+
+<script src="../vanilla/dashboard.js"></script>
 </body>
 </html>

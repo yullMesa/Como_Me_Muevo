@@ -1,10 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Como Me Muevo Iniciar Sesión</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como Me Muevo - Iniciar Sesión</title>
+    <link rel="stylesheet" href="../Style/Move.css">
 </head>
-<body>
+<body class="signup-body">
 
+    <div class="signup-container">
+        <!-- Columna Izquierda: Imagen / Ilustración -->
+        <div class="signup-left-space">
+            <!-- Usa la misma imagen o ilustración que tienes en el registro -->
+            <img src="../Style/image/background.jpg" alt="Ilustración Como Me Muevo" class="signup-img">
+        </div>
+
+        <!-- Columna Derecha: Formulario de Login -->
+        <div class="signup-right-form">
+            <div class="form-header">
+                <h2>Iniciar Sesión</h2>
+                <p>Ingresa tus datos para continuar tu viaje</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="input-group">
+                    <span class="input-icon">✉️</span>
+                    <input type="email" id="correo" required placeholder="Correo electrónico">
+                </div>
+
+                <div class="input-group">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="contrasena" required placeholder="Contraseña">
+                    <span class="toggle-password">👁️</span>
+                </div>
+
+                <div id="mensajeError" class="login-redirect" style="color: var(--rojo-principal); margin-bottom: 10px;"></div>
+
+                <button type="submit" class="btn-submit">Ingresar</button>
+
+                <div class="login-redirect">
+                    ¿No tienes cuenta? <a href="Signup.html">Regístrate</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="../vanilla/Login.js"></script>
 </body>
 </html>
