@@ -556,3 +556,136 @@ body.dashboard-body {
     border: 1px solid var(--gris-claro);
     box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 }
+
+
+/*-----------------------------------------*/
+/* --- Estilos para la Vista de Perfil --- */
+.perfil-container {
+    padding: 35px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    max-width: 800px;
+    margin: 20px auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.perfil-header {
+    margin-bottom: 25px;
+}
+
+.perfil-title {
+    color: #e63946;
+    margin-bottom: 5px;
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.perfil-subtitle {
+    color: #6c757d;
+    font-size: 0.95rem;
+}
+
+.perfil-section {
+    margin-bottom: 30px;
+}
+
+.perfil-section-title {
+    font-size: 1.1rem;
+    color: #333333;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #f1f1f1;
+    padding-bottom: 8px;
+    font-weight: 600;
+}
+
+.perfil-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.perfil-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.perfil-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.perfil-input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.perfil-input:focus {
+    border-color: #e63946;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.15);
+}
+
+.perfil-checkbox-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.perfil-checkbox-label {
+    background: #f8f9fa;
+    padding: 12px 18px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #495057;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.perfil-checkbox-label:hover {
+    background: #f1f3f5;
+    border-color: #ced4da;
+}
+
+.perfil-checkbox-label input {
+    margin-right: 10px;
+    accent-color: #e63946;
+    width: 16px;
+    height: 16px;
+}
+
+.perfil-btn-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 10px;
+}
+
+.perfil-btn-guardar {
+    background: #e63946;
+    color: white;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.perfil-btn-guardar:hover {
+    background: #d62828;
+}
+
+.perfil-btn-guardar:active {
+    transform: scale(0.98);
+}

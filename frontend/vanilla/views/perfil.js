@@ -1,49 +1,49 @@
 export function renderPerfil(container) {
     container.innerHTML = `
-        <div class="card" style="padding: 30px; background: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-            <div style="margin-bottom: 25px;">
-                <h2 style="color: #e63946; margin-bottom: 5px; font-size: 1.5rem;">Perfil del usuario</h2>
-                <p style="color: #6c757d; font-size: 0.95rem;">Gestiona tu información y preferencias de movilidad.</p>
+        <div class="perfil-container">
+            <div class="perfil-header">
+                <h2 class="perfil-title">Perfil del usuario</h2>
+                <p class="perfil-subtitle">Gestiona tu información personal y preferencias de movilidad.</p>
             </div>
 
             <!-- Información Personal -->
-            <div style="margin-bottom: 30px;">
-                <h3 style="font-size: 1.1rem; color: #333; margin-bottom: 15px; border-bottom: 2px solid #f1f1f1; padding-bottom: 8px;">Información personal</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                    <div>
-                        <label style="font-size: 0.85rem; color: #6c757d; display: block; margin-bottom: 4px;">Nombre</label>
-                        <input type="text" id="perfilNombre" value="Juan Pérez" style="width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 4px; font-size: 1rem;" />
+            <div class="perfil-section">
+                <h3 class="perfil-section-title">Información personal</h3>
+                <div class="perfil-grid">
+                    <div class="perfil-field">
+                        <label class="perfil-label" for="perfilNombre">Nombre</label>
+                        <input type="text" id="perfilNombre" class="perfil-input" value="Yull Sebastián" />
                     </div>
-                    <div>
-                        <label style="font-size: 0.85rem; color: #6c757d; display: block; margin-bottom: 4px;">E-mail</label>
-                        <input type="email" id="perfilEmail" value="juan.perez@email.com" style="width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 4px; font-size: 1rem;" />
+                    <div class="perfil-field">
+                        <label class="perfil-label" for="perfilEmail">E-mail</label>
+                        <input type="email" id="perfilEmail" class="perfil-input" value="yull.mesa@email.com" />
                     </div>
-                    <div>
-                        <label style="font-size: 0.85rem; color: #6c757d; display: block; margin-bottom: 4px;">Ciudad</label>
-                        <input type="text" id="perfilCiudad" value="Medellín" style="width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 4px; font-size: 1rem;" />
+                    <div class="perfil-field">
+                        <label class="perfil-label" for="perfilCiudad">Ciudad</label>
+                        <input type="text" id="perfilCiudad" class="perfil-input" value="Medellín" />
                     </div>
                 </div>
             </div>
 
             <!-- Preferencias de Transporte -->
-            <div style="margin-bottom: 30px;">
-                <h3 style="font-size: 1.1rem; color: #333; margin-bottom: 15px; border-bottom: 2px solid #f1f1f1; padding-bottom: 8px;">Preferencias de transporte</h3>
-                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                    <label style="background: #f8f9fa; padding: 10px 15px; border-radius: 6px; border: 1px solid #dee2e6; cursor: pointer;">
-                        <input type="checkbox" checked style="margin-right: 8px;" /> Metro
+            <div class="perfil-section">
+                <h3 class="perfil-section-title">Preferencias de transporte</h3>
+                <div class="perfil-checkbox-group">
+                    <label class="perfil-checkbox-label">
+                        <input type="checkbox" checked /> Metro
                     </label>
-                    <label style="background: #f8f9fa; padding: 10px 15px; border-radius: 6px; border: 1px solid #dee2e6; cursor: pointer;">
-                        <input type="checkbox" checked style="margin-right: 8px;" /> Metrocable
+                    <label class="perfil-checkbox-label">
+                        <input type="checkbox" checked /> Metrocable
                     </label>
-                    <label style="background: #f8f9fa; padding: 10px 15px; border-radius: 6px; border: 1px solid #dee2e6; cursor: pointer;">
-                        <input type="checkbox" checked style="margin-right: 8px;" /> Tranvía
+                    <label class="perfil-checkbox-label">
+                        <input type="checkbox" checked /> Tranvía
                     </label>
                 </div>
             </div>
 
             <!-- Botón de acción -->
-            <div>
-                <button id="btnGuardarPerfil" style="background: #e63946; color: white; padding: 12px 25px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">Editar perfil</button>
+            <div class="perfil-btn-container">
+                <button id="btnGuardarPerfil" class="perfil-btn-guardar">Guardar cambios</button>
             </div>
         </div>
     `;
