@@ -177,6 +177,45 @@ body.signup-body {
     justify-content: center;
     background-color: var(--blanco);
     overflow-y: auto;
+    position: relative;
+}
+
+/* Botón para volver */
+
+.btn-volver {
+
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--gris-oscuro);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.flecha {
+    font-size: 26px;
+    line-height: 1;
+}
+
+.texto-volver {
+    transition: color 0.2s ease;
+}
+
+.btn-volver:hover {
+    color: var(--rojo-principal);
+}
+
+.btn-volver:hover .flecha {
+    transform: translate(-3px);
+}
+
+.flecha {
+    transition: transform 0.2s ease;
 }
 
 .form-header h2 {
