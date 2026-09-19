@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Capturar los valores de los inputs (forzamos el correo a minúsculas)
         const nombre = document.getElementById("nombre").value;
         const correo = document.getElementById("correo").value.trim().toLowerCase();
-        const telefono = document.getElementById("telefono").value;
+        const celular = document.getElementById("telefono").value;
         const contrasena = document.getElementById("contrasena").value;
         const confirmarContrasena = document.getElementById("confirmarContrasena").value;
 
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const usuarioData = {
             nombre: nombre,
             correo: correo, // Se enviará siempre en minúsculas (ej: usuario@gmail.com)
-            telefono: telefono,
+            celular: celular,
             contrasena: contrasena
         };
 
