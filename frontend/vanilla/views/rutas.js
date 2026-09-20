@@ -16,13 +16,16 @@ export function renderRutas(container) {
                     <h3 class="card-title" style="margin-bottom: 15px;">Buscar Trayecto</h3>
                     <div class="form-group" style="margin-bottom: 15px;">
                         <label class="info-label">Origen:</label>
-                        <input type="text" id="inputOrigen" placeholder="Ej: Estación Niquía" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc;">
+                        <input type="text" id="inputOrigen" placeholder="Ej: Niquía" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc;">
                     </div>
                     <div class="form-group" style="margin-bottom: 15px;">
                         <label class="info-label">Destino:</label>
-                        <input type="text" id="inputDestino" placeholder="Ej: Estación Poblado" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc;">
+                        <input type="text" id="inputDestino" placeholder="Ej: Poblado" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc;">
                     </div>
                     <button id="btnCalcularRuta" class="btn-editar-perfil" style="width: 100%; cursor: pointer;">Calcular Ruta</button>
+                    
+                    <!-- Contenedor para mostrar el resultado de la búsqueda -->
+                    <div id="resultadoRuta" style="margin-top: 15px; font-size: 14px; color: #333;"></div>
                 </div>
 
                 <!-- Contenedor del Mapa Interactivo -->
@@ -34,30 +37,71 @@ export function renderRutas(container) {
         </div>
     `;
 
-    // Inicializar el mapa de Leaflet después de que el HTML se haya inyectado
+    // Inicializar el mapa y la lógica de búsqueda después de inyectar el HTML
     setTimeout(() => {
-        inicializarMapa();
+        const map = inicializarMapa();
+
+        const btnCalcular = document.getElementById('btnCalcularRuta');
+        const resultadoDiv = document.getElementById('resultadoRuta');
+
+        btnCalcular.addEventListener('click', async () => {
+            const origen = document.getElementById('inputOrigen').value.trim();
+            const destino = document.getElementById('inputDestino').value.trim();
+
+            if (!origen || !destino) {
+                resultadoDiv.innerHTML = '<span style="color: red;">Por favor completa origen y destino.</span>';
+                return;
+            }
+
+            resultadoDiv.innerHTML = 'Consultando ruta en el servidor...';
+
+            try {
+                // Petición al backend que creamos en RutaController
+                const response = await fetch(`http://localhost:8080/api/rutas/buscar?origen=${encodeURIComponent(origen)}&destino=${encodeURIComponent(destino)}`);
+
+                if (response.ok) {
+                    const rutas = await response.json();
+                    if (rutas.length > 0) {
+                        const r = rutas[0]; // Tomamos la primera coincidencia
+                        resultadoDiv.innerHTML = `
+                            <div style="background: #e6f4ea; padding: 10px; border-radius: 6px; border: 1px solid #34a853;">
+                                <b>✅ ¡Ruta Encontrada!</b><br>
+                                <b>Origen:</b> ${r.origen}<br>
+                                <b>Destino:</b> ${r.destino}<br>
+                                <b>Tiempo estimado:</b> ${r.tiempoEstimado ? r.tiempoEstimado + ' mins' : 'No especificado'}
+                            </div>
+                        `;
+                    } else {
+                        resultadoDiv.innerHTML = '<span style="color: #d93025;">No se encontraron rutas registradas para ese trayecto.</span>';
+                    }
+                } else {
+                    const errorMsg = await response.text();
+                    resultadoDiv.innerHTML = `<span style="color: #d93025;">${errorMsg}</span>`;
+                }
+            } catch (error) {
+                console.error('Error de conexión:', error);
+                resultadoDiv.innerHTML = '<span style="color: #d93025;">No se pudo conectar con el servidor backend.</span>';
+            }
+        });
     }, 100);
 }
 
 function inicializarMapa() {
-    // Evitar que Leaflet se reinicialice si ya existe el mapa
     const containerMap = L.DomUtil.get('map');
     if (containerMap != null) {
         containerMap._leaflet_id = null;
     }
 
-    // Coordenadas centradas por defecto en Medellín
     const map = L.map('map').setView([6.2442, -75.5812], 13);
 
-    // Capa visual gratuita de OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Marcador de ejemplo (puedes adaptarlo luego con las estaciones reales)
     L.marker([6.2442, -75.5812]).addTo(map)
         .bindPopup('<b>¿Cómo me muevo?</b><br>Punto central de operaciones.')
         .openPopup();
+
+    return map;
 }
