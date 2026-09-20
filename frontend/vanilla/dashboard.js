@@ -1,6 +1,7 @@
 import { renderPerfil } from './views/perfil.js';
 import { renderReportes } from './views/reportes.js';
 import { renderInicio } from './views/inicio.js';
+import { renderRutas } from './views/rutas.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // 🛡️ PASO DE SEGURIDAD: Verificamos si hay una sesión activa antes de cargar el panel
@@ -30,7 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const routes = {
         'inicio': renderInicio,
         'perfil': renderPerfil,
-        'reportes': renderReportes
+        'reportes': renderReportes,
+        'rutas': renderRutas
     };
     function loadRoute(viewName) {
         contentArea.innerHTML = ''; // Limpia la pantalla sin recargar la página
