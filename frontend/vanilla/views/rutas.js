@@ -1,3 +1,5 @@
+let routeLayer = null; // Variable global para guardar la línea actual del mapa
+
 export function renderRutas(container) {
     container.innerHTML = `
         <div class="rutas-wrapper">
@@ -16,7 +18,7 @@ export function renderRutas(container) {
                     <h3 class="card-title" style="margin-bottom: 15px;">Buscar Trayecto</h3>
                     <div class="form-group" style="margin-bottom: 15px;">
                         <label class="info-label">Origen:</label>
-                        <input type="text" id="inputOrigen" placeholder="Ej: Niquía" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc;">
+                        <input type="text" id="inputOrigen" placeholder="Ej: Niquia" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc;">
                     </div>
                     <div class="form-group" style="margin-bottom: 15px;">
                         <label class="info-label">Destino:</label>
@@ -37,12 +39,21 @@ export function renderRutas(container) {
         </div>
     `;
 
-    // Inicializar el mapa y la lógica de búsqueda después de inyectar el HTML
     setTimeout(() => {
         const map = inicializarMapa();
 
         const btnCalcular = document.getElementById('btnCalcularRuta');
         const resultadoDiv = document.getElementById('resultadoRuta');
+
+        // Coordenadas aproximadas de ejemplo para las estaciones del Valle de Aburrá
+        const coordenadasEstaciones = {
+            "niquia": [6.3402, -75.5451],
+            "poblado": [6.2104, -75.5785],
+            "bello": [6.3342, -75.5564],
+            "acevedo": [6.2915, -75.5682],
+            "universidad": [6.2671, -75.5679],
+            "san antonio": [6.2518, -75.5670]
+        };
 
         btnCalcular.addEventListener('click', async () => {
             const origen = document.getElementById('inputOrigen').value.trim();
@@ -56,13 +67,12 @@ export function renderRutas(container) {
             resultadoDiv.innerHTML = 'Consultando ruta en el servidor...';
 
             try {
-                // Petición al backend que creamos en RutaController
                 const response = await fetch(`http://localhost:8080/api/rutas/buscar?origen=${encodeURIComponent(origen)}&destino=${encodeURIComponent(destino)}`);
 
                 if (response.ok) {
                     const rutas = await response.json();
                     if (rutas.length > 0) {
-                        const r = rutas[0]; // Tomamos la primera coincidencia
+                        const r = rutas[0];
                         resultadoDiv.innerHTML = `
                             <div style="background: #e6f4ea; padding: 10px; border-radius: 6px; border: 1px solid #34a853;">
                                 <b>✅ ¡Ruta Encontrada!</b><br>
@@ -71,12 +81,34 @@ export function renderRutas(container) {
                                 <b>Tiempo estimado:</b> ${r.tiempoEstimado ? r.tiempoEstimado + ' mins' : 'No especificado'}
                             </div>
                         `;
+
+                        // --- LÓGICA PARA TRAZAR LA RUTA EN EL MAPA ---
+                        if (routeLayer) {
+                            map.removeLayer(routeLayer); // Borrar ruta anterior si existe
+                        }
+
+                        // Buscar coordenadas basadas en el texto ingresado (o usar valores por defecto si no están en el diccionario)
+                        const orgKey = r.origen.toLowerCase();
+                        const desKey = r.destino.toLowerCase();
+
+                        const coordsOrigen = coordenadasEstaciones[orgKey] || [6.2442, -75.5812]; // Centro Medellín por defecto
+                        const coordsDestino = coordenadasEstaciones[desKey] || [6.2104, -75.5785];
+
+                        // Dibujar línea (Polyline) conectando origen y destino
+                        routeLayer = L.polyline([coordsOrigen, coordsDestino], {
+                            color: '#d93025',
+                            weight: 5,
+                            opacity: 0.8
+                        }).addTo(map);
+
+                        // Ajustar la vista del mapa para que encuadre la ruta completa
+                        map.fitBounds(routeLayer.getBounds(), { padding: [50, 50] });
+
                     } else {
                         resultadoDiv.innerHTML = '<span style="color: #d93025;">No se encontraron rutas registradas para ese trayecto.</span>';
                     }
                 } else {
-                    const errorMsg = await response.text();
-                    resultadoDiv.innerHTML = `<span style="color: #d93025;">${errorMsg}</span>`;
+                    resultadoDiv.innerHTML = '<span style="color: #d93025;">No se encontraron rutas para ese trayecto.</span>';
                 }
             } catch (error) {
                 console.error('Error de conexión:', error);
@@ -98,10 +130,6 @@ function inicializarMapa() {
         maxZoom: 19,
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
-
-    L.marker([6.2442, -75.5812]).addTo(map)
-        .bindPopup('<b>¿Cómo me muevo?</b><br>Punto central de operaciones.')
-        .openPopup();
 
     return map;
 }
