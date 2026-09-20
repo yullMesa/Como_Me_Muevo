@@ -3,8 +3,10 @@ package com.comomemuevo.backend.controller;
 import com.comomemuevo.backend.model.Usuario;
 import com.comomemuevo.backend.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import com.comomemuevo.backend.model.PerfilDTO;
 
 import java.util.List;
 
@@ -51,4 +53,20 @@ public class UsuarioController {
 
         return "¡Bienvenido " + usuario.getNombre() + "!";
     }
+
+    @GetMapping("/perfil/{correo}")
+    public ResponseEntity<PerfilDTO> obtenerPerfilPorCorreo(@PathVariable String correo) {
+        Usuario usuario = usuarioRepository.findByCorreo(correo);
+        if (usuario == null) {
+            return ResponseEntity.notFound().build(); // Devuelve un 404 limpio en vez de vaciar la respuesta
+        }
+
+        PerfilDTO perfil = new PerfilDTO();
+        perfil.setNombre(usuario.getNombre());
+        perfil.setEmail(usuario.getCorreo());
+        perfil.setCiudad("Medellín");
+
+        return ResponseEntity.ok(perfil);
+    }
 }
+

@@ -1,15 +1,12 @@
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-
     const correo = document.getElementById('correo').value.trim().toLowerCase();
     const contrasena = document.getElementById('contrasena').value;
     const mensajeError = document.getElementById('mensajeError');
-
     const usuarioLogin = {
         correo: correo,
         contrasena: contrasena
     };
-
     try {
         const response = await fetch('http://localhost:8080/api/usuarios/login', {
             method: 'POST',
@@ -18,10 +15,12 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             },
             body: JSON.stringify(usuarioLogin)
         });
-
         const resultado = await response.text();
-
         if (resultado.includes('¡Bienvenido')) {
+
+            // 💡 AQUÍ ESTÁ EL CAMBIO: Guardamos el correo en el localStorage automáticamente
+            localStorage.setItem('correoUsuario', correo);
+
             alert(resultado);
             // Redirige al panel principal o dashboard
             window.location.href = 'Dashboard.html';
