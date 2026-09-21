@@ -1,0 +1,17 @@
+[
+  {
+    "origen": "Niquia",
+    "destino": "Poblado",
+    "tiempoEstimado": 35.5
+  },
+  {
+    "origen": "Bello",
+    "destino": "Universidad",
+    "tiempoEstimado": 20.0
+  },
+  {
+    "origen": "San Antonio",
+    "destino": "Acevedo",
+    "tiempoEstimado": 18.2
+  }
+]
