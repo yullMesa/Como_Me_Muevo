@@ -1,13 +1,108 @@
 [
   {
     "origen": "Niquia",
-    "destino": "Poblado",
-    "tiempoEstimado": 35.5
+    "destino": "Bello",
+    "tiempoEstimado": 5.0
   },
   {
     "origen": "Bello",
+    "destino": "Madera",
+    "tiempoEstimado": 4.0
+  },
+  {
+    "origen": "Madera",
+    "destino": "Tricentenario",
+    "tiempoEstimado": 3.0
+  },
+  {
+    "origen": "Tricentenario",
+    "destino": "Acevedo",
+    "tiempoEstimado": 3.0
+  },
+  {
+    "origen": "Acevedo",
+    "destino": "Caribe",
+    "tiempoEstimado": 3.0
+  },
+  {
+    "origen": "Caribe",
     "destino": "Universidad",
-    "tiempoEstimado": 20.0
+    "tiempoEstimado": 3.0
+  },
+  {
+    "origen": "Universidad",
+    "destino": "Hospital",
+    "tiempoEstimado": 2.0
+  },
+  {
+    "origen": "Hospital",
+    "destino": "Prado",
+    "tiempoEstimado": 2.0
+  },
+  {
+    "origen": "Prado",
+    "destino": "Parque Berrio",
+    "tiempoEstimado": 2.0
+  },
+  {
+    "origen": "Parque Berrio",
+    "destino": "San Antonio",
+    "tiempoEstimado": 2.0
+  },
+  {
+    "origen": "San Antonio",
+    "destino": "Alpujarra",
+    "tiempoEstimado": 2.0
+  },
+  {
+    "origen": "Alpujarra",
+    "destino": "Exposiciones",
+    "tiempoEstimado": 2.0
+  },
+  {
+    "origen": "Exposiciones",
+    "destino": "Industriales",
+    "tiempoEstimado": 3.0
+  },
+  {
+    "origen": "Industriales",
+    "destino": "Poblado",
+    "tiempoEstimado": 3.0
+  },
+  {
+    "origen": "Poblado",
+    "destino": "Aguacatala",
+    "tiempoEstimado": 3.0
+  },
+  {
+    "origen": "Aguacatala",
+    "destino": "Ayura",
+    "tiempoEstimado": 2.0
+  },
+  {
+    "origen": "Ayura",
+    "destino": "Envigado",
+    "tiempoEstimado": 3.0
+  },
+  {
+    "origen": "Envigado",
+    "destino": "Itagui",
+    "tiempoEstimado": 3.0
+  },
+  {
+    "origen": "Itagui",
+    "destino": "Sabaneta",
+    "tiempoEstimado": 3.0
+  },
+  {
+    "origen": "Sabaneta",
+    "destino": "La Estrella",
+    "tiempoEstimado": 4.0
+  },
+  {
+    "origen": "Niquia",
+    "destino": "Poblado",
+    "tiempoEstimado": 35.5
   },
   {
     "origen": "San Antonio",

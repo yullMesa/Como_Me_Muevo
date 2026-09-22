@@ -19,7 +19,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 48px;
+    padding: 20px 60px; /* Aumentamos el padding para que respire mejor */
     background-color: var(--blanco);
     border-bottom: 1px solid var(--gris-claro);
 }
@@ -32,7 +32,7 @@ body {
 }
 
 .logo-icon {
-    width: 36px;
+    width: 44px;
     height: 36px;
     background-color: var(--rojo-principal);
     color: var(--blanco);
@@ -46,13 +46,13 @@ body {
 
 .logo-text h2 {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     color: var(--negro);
     font-weight: 700;
 }
 
 .logo-text span {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     color: var(--gris-oscuro);
 }
 
@@ -65,7 +65,7 @@ body {
 .nav-links a {
     text-decoration: none;
     color: var(--gris-oscuro);
-    font-size: 0.95rem;
+    font-size: 1.05rem; /* Enlaces del menú más legibles */
     font-weight: 500;
     padding-bottom: 4px;
     transition: color 0.2s;
@@ -132,7 +132,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 60px 48px;
+    padding: 80px 60px; /* Más espacio vertical */
     background-color: var(--blanco);
     gap: 40px;
 }
@@ -194,7 +194,7 @@ main {
 }
 
 .hero-image {
-    flex: 1;
+    flex: 1.2;
     display: flex;
     justify-content: center;
 }
@@ -297,6 +297,10 @@ main {
     background-color: rgba(226, 27, 35, 0.1);
     border-radius: 8px;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
 }
 
 .advantage-card h3 {
@@ -371,4 +375,104 @@ footer {
     font-size: 0.85rem;
     color: #888888;
     margin: 0;
+}
+
+
+/* =========================
+   MEDIA QUERIES (RESPONSIVE MEJORADO)
+   ========================= */
+
+/* Para tablets y pantallas medianas (hasta 992px) */
+@media (max-width: 992px) {
+    .navbar {
+        padding: 12px 20px;
+        flex-wrap: wrap; /* Permite que los elementos bajen ordenadamente si no caben */
+        gap: 12px;
+    }
+
+    .nav-links {
+        gap: 16px; /* Reduce el espacio exagerado entre enlaces para que quepan mejor */
+    }
+
+    .nav-links a {
+        font-size: 0.85rem;
+    }
+
+    .hero {
+        padding: 40px 24px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-content {
+        max-width: 100%;
+    }
+
+    .hero-content h2 {
+        font-size: 2.25rem;
+    }
+
+    .cta-buttons {
+        justify-content: center;
+    }
+
+    .how-it-works,
+    .advantages,
+    .about,
+    .contact,
+    footer {
+        padding: 40px 24px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+}
+
+/* Para dispositivos móviles y celulares (hasta 768px) */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .nav-links {
+        gap: 14px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .nav-actions {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .hero-content h2 {
+        font-size: 1.85rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+    }
 }

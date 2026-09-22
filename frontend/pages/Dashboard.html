@@ -61,8 +61,11 @@
         <header class="dashboard-header">
             <button id="menuToggle" class="menu-toggle">☰</button>
             <div class="user-menu">
-                <span class="notification-badge">🔔 <span class="badge-count">1</span></span>
-                <span class="user-name" id="nombreUsuario">Cargando...</span>
+                <!-- Botón de Carrito de Compras para Transacciones -->
+                <button id="btnCarrito" class="cart-btn" title="Ver Carrito de Compras">
+                    🛒 <span class="badge-count" id="cartCount">0</span>
+                </button>
+                <span class="user-name" id="nombreUsuario">Comprar!!</span>
             </div>
         </header>
 
@@ -71,6 +74,57 @@
             <!-- Por defecto cargará la vista de inicio -->
         </div>
     </main>
+</div>
+
+<!-- VENTANA EMERGENTE (MODAL) DEL CARRITO Y PAGOS -->
+<div id="cartModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3>🛒 Carrito y Sistema de Pago</h3>
+            <button id="closeModal" class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <!-- Sección de productos/recargas -->
+            <div class="cart-items-section">
+                <h4>Selecciona tu recarga o producto:</h4>
+                <div class="product-card">
+                    <span>Recarga Tarjeta (Valor: $20.000)</span>
+                    <button class="btn-add-item" data-name="Recarga $20k" data-price="20000">Agregar</button>
+                </div>
+                <div class="product-card">
+                    <span>Pase Libre Mensual (Valor: $80.000)</span>
+                    <button class="btn-add-item" data-name="Pase Mensual" data-price="80000">Agregar</button>
+                </div>
+
+                <div class="selected-items-list">
+                    <h5>Resumen de Compra:</h5>
+                    <ul id="itemList">
+                        <li>Tu carrito está vacío.</li>
+                    </ul>
+                    <p class="cart-total">Total a Pagar: $<span id="cartTotal">0</span></p>
+                </div>
+            </div>
+
+            <!-- Sección de pago con tarjeta -->
+            <div class="checkout-section">
+                <h4>💳 Método de Pago</h4>
+                <form id="checkoutForm">
+                    <div class="form-group">
+                        <label>Tipo de Tarjeta:</label>
+                        <select id="tipoTarjeta" class="form-control">
+                            <option value="debito">Tarjeta Débito</option>
+                            <option value="credito">Tarjeta Crédito</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Número de Tarjeta:</label>
+                        <input type="text" id="numTarjeta" class="form-control" placeholder="1234 5678 9012 3456" maxlength="16" required>
+                    </div>
+                    <button type="submit" class="btn-pay">Pagar Ahora</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="module" src="../vanilla/dashboard.js"></script>

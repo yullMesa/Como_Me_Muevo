@@ -1,75 +1,21 @@
 package com.comomemuevo.backend.model;
 
-import jakarta.persistence.*;
-import java.util.UUID;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "usuarios")
-public class Usuario {
+public class Usuario extends PersonaBase {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    // Constructor vacío
+    public Usuario() {
+        super();
+    }
 
-    private String nombre;
-
-    @Column(unique = true, nullable = false)
-    private String correo;
-
-    private String celular; // <-- Campo nuevo agregado
-
-    @Column(nullable = false)
-    private String contrasena;
-
-    // Constructor vacío obligatorio para JPA
-    public Usuario() {}
-
-    // Constructor con parámetros (incluyendo celular)
+    // Constructor con parámetros enviando todo al padre con super()
     public Usuario(String nombre, String correo, String celular, String contrasena) {
-        this.nombre = nombre;
-        this.correo = correo;
-        this.celular = celular;
-        this.contrasena = contrasena;
+        super(nombre, correo, celular, contrasena);
     }
 
-    // Getters y Setters
-    public UUID getId() {
-        return id;
-    }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getCelular() {
-        return celular;
-    }
-
-    public void setCelular(String celular) {
-        this.celular = celular;
-    }
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
 }
