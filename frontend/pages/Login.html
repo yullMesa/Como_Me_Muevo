@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Como Me Muevo - Iniciar Sesión</title>
-    <link rel="stylesheet" href="../Style/Signup.css">
+    <link rel="stylesheet" href="../Style/Signup_Login.css">
     <link rel="shortcut icon" href="../Style/image/How_favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="signup-body">
 
@@ -13,7 +15,7 @@
         <!-- Columna Izquierda: Imagen / Ilustración -->
         <div class="signup-left-space">
             <!-- Usa la misma imagen o ilustración que tienes en el registro -->
-            <img src="../Style/image/background.jpg" alt="Ilustración Como Me Muevo" class="signup-img">
+            <img src="../Style/image/ilustracion.png" alt="Ilustración Como Me Muevo" class="signup-img">
         </div>
 
         <!-- Columna Derecha: Formulario de Login -->
@@ -29,22 +31,42 @@
 
             <form id="loginForm">
                 <div class="input-group">
-                    <span class="input-icon">✉️</span>
+                    <span class="input-icon"><i class="fa-regular fa-envelope"></i></span>
                     <input type="email" id="correo" required placeholder="Correo electrónico">
                 </div>
 
                 <div class="input-group">
-                    <span class="input-icon">🔒</span>
+                    <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
                     <input type="password" id="contrasena" required placeholder="Contraseña">
-                    <span class="toggle-password">👁️</span>
+                    <span class="toggle-password"><i class="fa-regular fa-eye"></i></span>
                 </div>
 
                 <div id="mensajeError" class="login-redirect" style="color: var(--rojo-principal); margin-bottom: 10px;"></div>
 
                 <button type="submit" class="btn-submit">Ingresar</button>
 
+                <!-- SECCIÓN DE GOOGLE -->
+                <div class="divider">
+                    <span>o continúa con</span>
+                </div>
+
+                <div id="g_id_onload"
+                    data-client_id="938272356237-2p3daq2ttmqbihk1pq4rgaqm236vhq3f.apps.googleusercontent.com"
+                    data-callback="handleCredentialResponse"
+                    data-auto_prompt="false">
+                </div>
+
+                <div class="g_id_signin" 
+                    data-type="standard" 
+                    data-size="large" 
+                    data-theme="outline" 
+                    data-text="sign_in_with" 
+                    data-shape="rectangular" 
+                    data-logo_alignment="left">
+                </div>
+
                 <div class="login-redirect">
-                    ¿No tienes cuenta? <a href="Signup.html">Regístrate</a>
+                    ¿No tienes cuenta? <a href="SignUp.html">Regístrate</a>
                 </div>
             </form>
         </div>
