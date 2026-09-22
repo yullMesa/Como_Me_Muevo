@@ -70,4 +70,80 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+    // 🛒 LÓGICA DE LA VENTANA EMERGENTE DEL CARRITO
+    const btnCarrito = document.getElementById('btnCarrito');
+    const cartModal = document.getElementById('cartModal');
+    const closeModal = document.getElementById('closeModal');
+    const cartCount = document.getElementById('cartCount');
+    const cartTotal = document.getElementById('cartTotal');
+    const itemList = document.getElementById('itemList');
+
+    let carrito = [];
+
+    if (btnCarrito && cartModal) {
+        btnCarrito.addEventListener('click', () => {
+            cartModal.classList.add('active');
+        });
+    }
+
+    if (closeModal && cartModal) {
+        closeModal.addEventListener('click', () => {
+            cartModal.classList.remove('active');
+        });
+    }
+
+    // Botones para agregar productos al carrito
+    document.querySelectorAll('.btn-add-item').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const name = e.target.getAttribute('data-name');
+            const price = parseFloat(e.target.getAttribute('data-price'));
+
+            carrito.push({ name, price });
+            actualizarCarritoUI();
+        });
+    });
+
+    function actualizarCarritoUI() {
+        cartCount.textContent = carrito.length;
+        itemList.innerHTML = '';
+
+        if (carrito.length === 0) {
+            itemList.innerHTML = '<li>Tu carrito está vacío.</li>';
+            cartTotal.textContent = '0';
+            return;
+        }
+
+        let total = 0;
+        carrito.forEach((item, index) => {
+            total += item.price;
+            const li = document.createElement('li');
+            li.textContent = `${item.name} - $${item.price}`;
+            itemList.appendChild(li);
+        });
+        cartTotal.textContent = total.toLocaleString();
+    }
+
+    // Simulación del pago con tarjeta
+    const checkoutForm = document.getElementById('checkoutForm');
+    if (checkoutForm) {
+        checkoutForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (carrito.length === 0) {
+                alert("El carrito está vacío. Agrega un producto para pagar.");
+                return;
+            }
+
+            const numTarjeta = document.getElementById('numTarjeta').value;
+            if (numTarjeta.length < 16) {
+                alert("Por favor ingresa un número de tarjeta válido de 16 dígitos.");
+                return;
+            }
+
+            alert("¡Transacción y pago con tarjeta exitosos! Gracias por tu compra.");
+            carrito = [];
+            actualizarCarritoUI();
+            cartModal.classList.remove('active');
+            checkoutForm.reset();
+        });
+    }
 });
