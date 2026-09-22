@@ -8,32 +8,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const correoUsuario = localStorage.getItem('correoUsuario');
     if (!correoUsuario) {
         alert("Acceso denegado. Por favor inicia sesión.");
-        window.location.href = '../pages/Login.html'; // Ajusta la ruta si es necesario según dónde tengas el Login.html
-        return; // Detenemos la ejecución del script
+        window.location.href = '../pages/Login.html';
+        return;
     }
+
+    // 📌 Declaramos los elementos principales al inicio para evitar errores de referencia
+    const navItems = document.querySelectorAll('.sidebar-nav .nav-item');
+    const contentArea = document.getElementById('contentArea');
+
     // Capturamos el botón de cerrar sesión
     const btnCerrarSesion = document.getElementById('btnLogout');
-
     if (btnCerrarSesion) {
         btnCerrarSesion.addEventListener('click', (e) => {
-            e.preventDefault(); // Evitamos que recargue o navegue de inmediato sin limpiar
-
-            // Borramos el rastro de la sesión actual
+            e.preventDefault();
             localStorage.removeItem('correoUsuario');
-
-            // Redirigimos manualmente al Login
             window.location.href = 'Login.html';
         });
     }
 
-    const navItems = document.querySelectorAll('.sidebar-nav .nav-item');
-    const contentArea = document.getElementById('contentArea');
+    // 📱 INTERACTIVIDAD DEL MENÚ HAMBURGUESA (RESPONSIVE)
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    if (menuToggle && sidebar) {
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+    }
+
+    // Definición de rutas de la SPA
     const routes = {
         'inicio': renderInicio,
         'perfil': renderPerfil,
         'reportes': renderReportes,
         'rutas': renderRutas
     };
+
     function loadRoute(viewName) {
         contentArea.innerHTML = ''; // Limpia la pantalla sin recargar la página
         if (routes[viewName]) {
@@ -42,14 +51,23 @@ document.addEventListener('DOMContentLoaded', () => {
             contentArea.innerHTML = `<h2>Vista en construcción</h2>`;
         }
     }
+
+    // Carga por defecto la vista de inicio al entrar
     loadRoute('inicio');
+
+    // Asignar eventos de clic a cada opción del menú lateral
     navItems.forEach(item => {
         item.addEventListener('click', (e) => {
-            e.preventDefault(); // Evita la recarga de la página (clave para la SPA)
+            e.preventDefault();
             navItems.forEach(nav => nav.classList.remove('active'));
             item.classList.add('active');
             const view = item.getAttribute('data-view');
             loadRoute(view);
+
+            // Si está en pantalla pequeña, oculta el sidebar automáticamente al seleccionar una vista
+            if (window.innerWidth <= 768 && sidebar) {
+                sidebar.classList.remove('active');
+            }
         });
     });
 });
