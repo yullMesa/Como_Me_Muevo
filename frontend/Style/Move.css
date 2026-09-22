@@ -19,7 +19,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 48px;
+    padding: 20px 60px; /* Aumentamos el padding para que respire mejor */
     background-color: var(--blanco);
     border-bottom: 1px solid var(--gris-claro);
 }
@@ -32,7 +32,7 @@ body {
 }
 
 .logo-icon {
-    width: 36px;
+    width: 44px;
     height: 36px;
     background-color: var(--rojo-principal);
     color: var(--blanco);
@@ -46,13 +46,13 @@ body {
 
 .logo-text h2 {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     color: var(--negro);
     font-weight: 700;
 }
 
 .logo-text span {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     color: var(--gris-oscuro);
 }
 
@@ -65,7 +65,7 @@ body {
 .nav-links a {
     text-decoration: none;
     color: var(--gris-oscuro);
-    font-size: 0.95rem;
+    font-size: 1.05rem; /* Enlaces del menú más legibles */
     font-weight: 500;
     padding-bottom: 4px;
     transition: color 0.2s;
@@ -132,7 +132,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 60px 48px;
+    padding: 80px 60px; /* Más espacio vertical */
     background-color: var(--blanco);
     gap: 40px;
 }
@@ -194,7 +194,7 @@ main {
 }
 
 .hero-image {
-    flex: 1;
+    flex: 1.2;
     display: flex;
     justify-content: center;
 }
