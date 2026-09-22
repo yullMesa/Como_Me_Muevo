@@ -89,11 +89,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // --- Lógica de envío del formulario ---
+    // --- Lógica de envío del formulario ---
     signupForm.addEventListener("submit", function (event) {
         event.preventDefault(); // Evita que recargue la página
 
-        // Capturar los valores de los inputs (forzamos el correo a minúsculas)
-        const nombre = document.getElementById("nombre").value.trim;
+        // CORRECCIÓN 1: Agregar los paréntesis () a .trim()
+        const nombre = document.getElementById("nombre").value.trim();
         const correo = document.getElementById("correo").value.trim().toLowerCase();
         const celular = document.getElementById("telefono").value;
         const contrasena = document.getElementById("contrasena").value;
@@ -114,10 +115,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // 3. Validación de Longitud Mínima de Contraseña
-        // Expresión regular: Mínimo 8 caracteres, al menos 1 mayúscula, 1 minúscula, 1 número y 1 carácter especial
         const regexContrasena = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-        if (!regexContrasena.text(contrasena)) {
+        // CORRECCIÓN 2: Cambiar .text por .test
+        if (!regexContrasena.test(contrasena)) {
             alert("La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial (@$!%*?&).");
             return;
         }
@@ -131,14 +132,12 @@ document.addEventListener("DOMContentLoaded", function () {
         // Objeto de datos a enviar al backend de Java (Spring Boot)
         const usuarioData = {
             nombre: nombre,
-            correo: correo, // Se enviará siempre en minúsculas (ej: usuario@gmail.com)
+            correo: correo,
             celular: celular,
             contrasena: contrasena
         };
 
-        // Actualiza la URL para incluir el sub-endpoint "/registro"
         const URL_BACKEND = "http://localhost:8080/api/usuarios/registro";
-
         fetch(URL_BACKEND, {
             method: "POST",
             headers: {
@@ -155,12 +154,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             })
             .then(mensaje => {
-                alert(mensaje); // Muestra el mensaje exacto que manda Java ("¡Usuario registrado exitosamente!" o el error de correo duplicado)
+                alert(mensaje);
                 window.location.href = "Login.html";
             })
             .catch(error => {
                 console.error("Hubo un error:", error);
-                alert(error.message); // Muestra la razón real del error en pantalla
+                alert(error.message);
             });
     });
 });

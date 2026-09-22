@@ -1,49 +1,57 @@
 package com.comomemuevo.backend.controller;
 
+import com.comomemuevo.backend.model.HistorialRuta;
 import com.comomemuevo.backend.model.Ruta;
+import com.comomemuevo.backend.model.Usuario;
+import com.comomemuevo.backend.repository.HistorialRutaRepository;
 import com.comomemuevo.backend.repository.RutaRepository;
+import com.comomemuevo.backend.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/rutas")
-@CrossOrigin(origins = "*") // Permite la conexión con el frontend
+@CrossOrigin(origins = "*")
 public class RutaController {
-
-
 
     @Autowired
     private RutaRepository rutaRepository;
 
-    // 1. Endpoint para obtener todas las rutas registradas
-    @GetMapping
-    public List<Ruta> obtenerTodasLasRutas() {
-        return rutaRepository.findAll();
-    }
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-    // 2. Endpoint para registrar una nueva ruta (si el usuario o un administrador la crea)
-    @PostMapping
-    public ResponseEntity<String> crearRuta(@RequestBody Ruta nuevaRuta) {
-        try {
-            rutaRepository.save(nuevaRuta);
-            return ResponseEntity.ok("¡Ruta registrada exitosamente!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al registrar la ruta: " + e.getMessage());
-        }
-    }
+    @Autowired
+    private HistorialRutaRepository historialRutaRepository;
 
-    // 3. Endpoint opcional para buscar rutas por origen y destino
     @GetMapping("/buscar")
-    public ResponseEntity<?> buscarRutas(@RequestParam String origen, @RequestParam String destino) {
+    public ResponseEntity<List<Ruta>> buscarRuta(
+            @RequestParam String origen,
+            @RequestParam String destino,
+            @RequestParam(required = false) String correo
+    ) {
+        System.out.println("--- BÚSQUEDA DE RUTA INICIADA ---");
+        System.out.println("Origen: " + origen + " | Destino: " + destino);
+        System.out.println("Correo recibido: " + correo);
+
         List<Ruta> rutasEncontradas = rutaRepository.buscarBidireccional(origen, destino);
 
-        if (rutasEncontradas.isEmpty()) {
-            return ResponseEntity.status(404).body("No se encontraron rutas para ese trayecto.");
+        // Verificamos que hay rutas y que el correo no llegó vacío
+        if (!rutasEncontradas.isEmpty() && correo != null) {
+            Ruta rutaElegida = rutasEncontradas.get(0); // Aquí definimos la variable que faltaba
+
+            Usuario usuario = usuarioRepository.findByCorreo(correo);
+            if (usuario != null) {
+                HistorialRuta historial = new HistorialRuta(usuario, rutaElegida);
+                historialRutaRepository.save(historial);
+                System.out.println("¡HISTORIAL GUARDADO EXITOSAMENTE PARA EL CORREO: " + correo + "!");
+            } else {
+                System.out.println("AVISO: El usuario con correo " + correo + " no existe.");
+            }
         }
 
+        // Faltaba este return obligatorio para solucionar el error de compilación
         return ResponseEntity.ok(rutasEncontradas);
     }
 }

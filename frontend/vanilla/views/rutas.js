@@ -59,6 +59,9 @@ export function renderRutas(container) {
             const origen = document.getElementById('inputOrigen').value.trim();
             const destino = document.getElementById('inputDestino').value.trim();
 
+
+            const correoUsuario = localStorage.getItem('usuarioEmail') || localStorage.getItem('correo') || 'yullmesa@admin.com'; // Ajusta la key según la uses en tu login
+
             if (!origen || !destino) {
                 resultadoDiv.innerHTML = '<span style="color: red;">Por favor completa origen y destino.</span>';
                 return;
@@ -67,7 +70,7 @@ export function renderRutas(container) {
             resultadoDiv.innerHTML = 'Consultando ruta en el servidor...';
 
             try {
-                const response = await fetch(`http://localhost:8080/api/rutas/buscar?origen=${encodeURIComponent(origen)}&destino=${encodeURIComponent(destino)}`);
+                const response = await fetch(`http://localhost:8080/api/rutas/buscar?origen=${encodeURIComponent(origen)}&destino=${encodeURIComponent(destino)}&correo=${encodeURIComponent(correoUsuario)}`);
 
                 if (response.ok) {
                     const rutas = await response.json();
