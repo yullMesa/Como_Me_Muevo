@@ -2,24 +2,27 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>¿Cómo Me Muevo? - Registro</title>
-    <link rel="stylesheet" href="../Style/Signup.css">
+    <link rel="stylesheet" href="../Style/Signup_Login.css">
     <link rel="shortcut icon" href="../Style/image/How_favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="signup-body">
 
 <div class="signup-container">
-    <!-- Lado izquierdo: La imagen original sin pixelarse -->
+    <!-- Lado izquierdo -->
     <div class="signup-left-space">
-        <img src="../Style/image/background.jpg" alt="Ilustración transporte" class="signup-img">
+        <img src="../Style/image/ilustracion.png" alt="Ilustración transporte" class="signup-img">
     </div>
 
-    <!-- Lado derecho: Formulario de Registro del usuario -->
+    <!-- Lado derecho -->
     <div class="signup-right-form">
-            <a href="../index.html" class="btn-volver">
-                <span class="flecha">←</span>
-                <span class="texto-volver">Volver al inicio</span>
-            </a>
+        <a href="../index.html" class="btn-volver">
+            <span class="flecha">←</span>
+            <span class="texto-volver">Volver al inicio</span>
+        </a>
 
         <div class="form-header">
             <h2>Crea tu cuenta</h2>
@@ -28,30 +31,63 @@
 
         <form id="signupForm">
             <div class="input-group">
-                <span class="input-icon">👤</span>
+                <span class="input-icon"><i class="fa-regular fa-user"></i></span>
                 <input type="text" id="nombre" placeholder="Nombre completo" required>
             </div>
 
             <div class="input-group">
-                <span class="input-icon">✉️</span>
+                <span class="input-icon"><i class="fa-regular fa-envelope"></i></span>
                 <input type="email" id="correo" placeholder="Correo electrónico" required>
             </div>
 
             <div class="input-group">
-                <span class="input-icon">📱</span>
+                <span class="input-icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
                 <input type="tel" id="telefono" placeholder="Número de celular" required>
             </div>
 
             <div class="input-group">
-                <span class="input-icon">🔒</span>
+                <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
                 <input type="password" id="contrasena" placeholder="Contraseña" required>
-                <span class="toggle-password">👁️‍🗨️</span>
+                <span class="toggle-password"><i class="fa-regular fa-eye"></i></span>
+            </div>
+
+            <!-- Mensajes visuales de error/requisitos -->
+            <div id="passwordFeedback" style="font-size: 0.75rem; margin: -4px 0 10px 0; display: none;">
+                <p id="reqLength" style="color: #dc3545; margin: 2px 0;">✖ Mínimo 8 caracteres</p>
+                <p id="reqUpper" style="color: #dc3545; margin: 2px 0;">✖ Al menos una letra mayúscula</p>
+                <p id="reqLower" style="color: #dc3545; margin: 2px 0;">✖ Al menos una letra minúscula</p>
+                <p id="reqNum" style="color: #dc3545; margin: 2px 0;">✖ Al menos un número</p>
+                <p id="reqSpecial" style="color: #dc3545; margin: 2px 0;">✖ Al menos un carácter especial (@$!%*?&)</p>
             </div>
 
             <div class="input-group">
-                <span class="input-icon">🔒</span>
+                <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
                 <input type="password" id="confirmarContrasena" placeholder="Confirmar contraseña" required>
-                <span class="toggle-password">👁️‍🗨️</span>
+                <span class="toggle-password"><i class="fa-regular fa-eye"></i></span>
+            </div>
+
+            <div id="matchFeedback" style="font-size: 0.75rem; margin: -4px 0 10px 0; color: #dc3545; display: none;">
+                ✖ Las contraseñas no coinciden
+            </div>
+
+            <!-- SECCIÓN DE GOOGLE -->
+            <div class="divider">
+                <span>o regístrate con</span>
+            </div>
+
+            <div id="g_id_onload"
+                data-client_id="938272356237-2p3daq2ttmqbihk1pq4rgaqm236vhq3f.apps.googleusercontent.com"
+                data-callback="handleCredentialResponse"
+                data-auto_prompt="false">
+            </div>
+
+            <div class="g_id_signin" 
+                data-type="standard" 
+                data-size="large" 
+                data-theme="outline" 
+                data-text="signup_with" 
+                data-shape="rectangular" 
+                data-logo_alignment="left">
             </div>
 
             <div class="terms-group">
@@ -68,6 +104,6 @@
     </div>
 </div>
 
-<script type="module" src="../vanilla/SignUp.js"></script>
+<script src="../vanilla/SignUp.js"></script>
 </body>
 </html>
