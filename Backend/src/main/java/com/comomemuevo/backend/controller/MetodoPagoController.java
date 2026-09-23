@@ -22,39 +22,31 @@ public class MetodoPagoController {
     private UsuarioRepository usuarioRepository;
 
     @GetMapping("/tarjetas")
-    public ResponseEntity<?> obtenerTarjetasPorCorreo(@RequestParam String correo) {
-        if (correo == null || correo.isEmpty() || correo.equals("null")) {
-            return ResponseEntity.status(401).body("No hay una sesión activa. Por favor inicia sesión.");
-        }
-
+    public ResponseEntity<List<MetodoPago>> obtenerTarjetasPorCorreo(@RequestParam String correo) {
         Usuario usuario = usuarioRepository.findByCorreo(correo);
         if (usuario == null) {
-            return ResponseEntity.status(404).body("Usuario de sesión no encontrado en el sistema.");
+            return ResponseEntity.status(404).body(null);
         }
-
         List<MetodoPago> tarjetas = metodoPagoRepository.findByUsuarioId(usuario.getId());
         return ResponseEntity.ok(tarjetas);
     }
 
     @PostMapping("/solicitar")
-    public ResponseEntity<?> solicitarTarjetaPorCorreo(@RequestParam String correo) {
-        if (correo == null || correo.isEmpty() || correo.equals("null")) {
-            return ResponseEntity.status(401).body("No hay una sesión activa.");
-        }
+    public ResponseEntity<?> solicitarTarjeta(
+            @RequestParam String correo,
+            @RequestParam(defaultValue = "Ahorros") String tipo) {
 
         Usuario usuario = usuarioRepository.findByCorreo(correo);
         if (usuario == null) {
             return ResponseEntity.status(404).body("Usuario no encontrado.");
         }
 
-        MetodoPago nuevaTarjeta = new MetodoPago(
-                "Tarjeta Débito C.M.M.",
-                "**** **** **** " + (int)(Math.random() * 9000 + 1000),
-                0.0,
-                usuario
-        );
+        String numeroAleatorio = "**** **** **** " + (1000 + (int)(Math.random() * 9000));
+        double saldoInicial = tipo.equalsIgnoreCase("Crédito") ? 1500000.0 : 0.0;
 
+        MetodoPago nuevaTarjeta = new MetodoPago(tipo, numeroAleatorio, saldoInicial, usuario);
         metodoPagoRepository.save(nuevaTarjeta);
-        return ResponseEntity.ok(nuevaTarjeta);
+
+        return ResponseEntity.ok("Tarjeta de " + tipo + " creada exitosamente.");
     }
 }
