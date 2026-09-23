@@ -60,10 +60,11 @@ export function renderRutas(container) {
             const destino = document.getElementById('inputDestino').value.trim();
 
 
-            const correoUsuario = localStorage.getItem('usuarioEmail') || localStorage.getItem('correo') || 'yullmesa@admin.com'; // Ajusta la key según la uses en tu login
+            // Usa únicamente la clave correcta con la que guardas el login
+            const correoUsuario = localStorage.getItem('correoUsuario');
 
-            if (!origen || !destino) {
-                resultadoDiv.innerHTML = '<span style="color: red;">Por favor completa origen y destino.</span>';
+            if (!correoUsuario) {
+                resultadoDiv.innerHTML = '<span style="color: red;">Error: No hay sesión activa. Por favor vuelve a iniciar sesión.</span>';
                 return;
             }
 

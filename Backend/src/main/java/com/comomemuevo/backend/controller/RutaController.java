@@ -34,13 +34,10 @@ public class RutaController {
         System.out.println("--- BÚSQUEDA DE RUTA INICIADA ---");
         System.out.println("Origen: " + origen + " | Destino: " + destino);
         System.out.println("Correo recibido: " + correo);
-
         List<Ruta> rutasEncontradas = rutaRepository.buscarBidireccional(origen, destino);
 
-        // Verificamos que hay rutas y que el correo no llegó vacío
         if (!rutasEncontradas.isEmpty() && correo != null) {
-            Ruta rutaElegida = rutasEncontradas.get(0); // Aquí definimos la variable que faltaba
-
+            Ruta rutaElegida = rutasEncontradas.get(0);
             Usuario usuario = usuarioRepository.findByCorreo(correo);
             if (usuario != null) {
                 HistorialRuta historial = new HistorialRuta(usuario, rutaElegida);
@@ -50,8 +47,15 @@ public class RutaController {
                 System.out.println("AVISO: El usuario con correo " + correo + " no existe.");
             }
         }
-
-        // Faltaba este return obligatorio para solucionar el error de compilación
         return ResponseEntity.ok(rutasEncontradas);
+    }
+
+    // NUEVO ENDPOINT PARA CONSUMIR EL HISTORIAL DESDE EL FRONTEND
+    @GetMapping("/historial")
+    public ResponseEntity<List<HistorialRuta>> obtenerHistorial(@RequestParam String correo) {
+        System.out.println("--- CONSULTANDO HISTORIAL DE RUTAS ---");
+        System.out.println("Correo solicitado: " + correo);
+        List<HistorialRuta> historial = historialRutaRepository.findByUsuario_Correo(correo);
+        return ResponseEntity.ok(historial);
     }
 }

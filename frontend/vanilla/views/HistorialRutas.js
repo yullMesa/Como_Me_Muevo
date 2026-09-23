@@ -6,70 +6,72 @@ export function renderHistorialRutas(container) {
                 <p style="color: #666;">Consulta el historial de tus viajes y recorridos completados.</p>
             </div>
 
-            <!-- Tarjetas de Estadísticas superiores -->
-            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px;">
-                <div class="stat-card" style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                    <span style="font-size: 12px; color: #666;">Viajes realizados</span>
-                    <h3 style="margin: 5px 0 0; color: #333;">4</h3>
-                </div>
-                <div class="stat-card" style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                    <span style="font-size: 12px; color: #666;">Distancia total</span>
-                    <h3 style="margin: 5px 0 0; color: #333;">45.2 km</h3>
-                </div>
-                <div class="stat-card" style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                    <span style="font-size: 12px; color: #666;">Tiempo total</span>
-                    <h3 style="margin: 5px 0 0; color: #333;">2h 15 min</h3>
-                </div>
-                <div class="stat-card" style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                    <span style="font-size: 12px; color: #666;">Gasto estimado</span>
-                    <h3 style="margin: 5px 0 0; color: #333;">$8.800</h3>
-                </div>
-            </div>
-
-            <!-- Contenedor principal dividido (Lista izquierda / Mapa derecha) -->
             <div class="historial-content-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                
                 <!-- Sección de la lista de rutas -->
                 <div class="routes-list-section" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
                     <h3 style="margin-bottom: 15px;">Tus Viajes Recientes</h3>
                     <div id="listaHistorial" style="display: flex; flex-direction: column; gap: 10px;">
-                        <!-- Ejemplo estático de tarjeta de ruta que luego conectaremos dinámicamente -->
-                        <div class="route-item-card" style="padding: 12px; border: 1px solid #eaeaea; border-radius: 6px; cursor: pointer; transition: background 0.2s;">
-                            <strong style="color: #333;">San Antonio → Poblado</strong>
-                            <p style="margin: 5px 0 0; font-size: 13px; color: #666;">🕒 35 min &nbsp;|&nbsp; 📏 12.4 km &nbsp;|&nbsp; 🚌 Bus</p>
-                        </div>
+                        <p>Cargando viajes desde la base de datos...</p>
                     </div>
                 </div>
 
-                <!-- Sección del Mapa e Interfaz de Detalle -->
+                <!-- Sección del Mapa -->
                 <div class="route-map-section" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
                     <h3 style="margin-bottom: 15px;">Detalle del viaje en el Mapa</h3>
                     <div id="mapaHistorial" style="width: 100%; height: 320px; border-radius: 6px; z-index: 1;"></div>
                 </div>
-
             </div>
         </div>
     `;
 
-    // Inicializar el mapa de Leaflet de forma segura después de que el HTML esté montado
+    // 1. Inicializar Mapa
     setTimeout(() => {
         const mapaDiv = document.getElementById('mapaHistorial');
         if (mapaDiv) {
-            // Coordenadas base (ej: Área metropolitana / Medellín)
             const map = L.map('mapaHistorial').setView([6.25184, -75.56359], 13);
-
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
 
-            // Marcador de ejemplo inicial
-            L.marker([6.25184, -75.56359]).addTo(map)
-                .bindPopup('Punto de partida del viaje')
-                .openPopup();
+            // 2. Consumir el Backend
+            const correoUsuario = localStorage.getItem('correoUsuario');
+            const listaHistorialDiv = document.getElementById('listaHistorial');
+
+            if (correoUsuario) {
+                fetch(`http://localhost:8080/api/rutas/historial?correo=${correoUsuario}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length === 0) {
+                            listaHistorialDiv.innerHTML = `<p>No tienes rutas registradas todavía.</p>`;
+                            return;
+                        }
+
+                        listaHistorialDiv.innerHTML = '';
+                        data.forEach(item => {
+                            const routeCard = document.createElement('div');
+                            routeCard.className = 'route-item-card';
+                            routeCard.style.cssText = 'padding: 12px; border: 1px solid #eaeaea; border-radius: 6px; cursor: pointer; transition: background 0.2s;';
+                            routeCard.innerHTML = `
+                                <strong style="color: #333;">${item.ruta.origen} → ${item.ruta.destino}</strong>
+                                <p style="margin: 5px 0 0; font-size: 13px; color: #666;">🕒 ${item.ruta.tiempoEstimado} &nbsp;|&nbsp; 📅 ${item.fechaConsulta || 'Reciente'}</p>
+                            `;
+
+                            // Evento para centrar el mapa o ver detalles al hacer clic en una ruta
+                            routeCard.addEventListener('click', () => {
+                                L.marker([6.25184, -75.56359]).addTo(map)
+                                    .bindPopup(`Ruta: ${item.ruta.origen} a ${item.ruta.destino}`)
+                                    .openPopup();
+                            });
+
+                            listaHistorialDiv.appendChild(routeCard);
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error al cargar historial:", error);
+                        listaHistorialDiv.innerHTML = `<p style="color: red;">Error al cargar el historial de viajes.</p>`;
+                    });
+            }
         }
     }, 150);
-
-    const correoUsuario = localStorage.getItem('correoUsuario');
-    console.log("Cargando interfaz visual y mapa de historial para:", correoUsuario);
 }
