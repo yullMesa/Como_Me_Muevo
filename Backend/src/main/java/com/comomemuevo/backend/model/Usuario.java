@@ -10,25 +10,27 @@ import java.util.List;
 public class Usuario extends PersonaBase {
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore // Evita ciclos de serialización infinita en respuestas JSON
+    @JsonIgnore
     private List<HistorialRuta> historialRutas = new ArrayList<>();
 
-    // Constructor vacío
+    // NUEVA RELACIÓN: Un usuario tiene varias tarjetas o métodos de pago
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<MetodoPago> metodosPago = new ArrayList<>();
+
     public Usuario() {
         super();
     }
 
-    // Constructor con parámetros enviando todo al padre con super()
     public Usuario(String nombre, String correo, String celular, String contrasena) {
         super(nombre, correo, celular, contrasena);
     }
 
-    // Getter y Setter del Historial
-    public List<HistorialRuta> getHistorialRutas() {
-        return historialRutas;
-    }
+    // Getters y Setters de HistorialRutas...
+    public List<HistorialRuta> getHistorialRutas() { return historialRutas; }
+    public void setHistorialRutas(List<HistorialRuta> historialRutas) { this.historialRutas = historialRutas; }
 
-    public void setHistorialRutas(List<HistorialRuta> historialRutas) {
-        this.historialRutas = historialRutas;
-    }
+    // Getters y Setters de MetodosPago
+    public List<MetodoPago> getMetodosPago() { return metodosPago; }
+    public void setMetodosPago(List<MetodoPago> metodosPago) { this.metodosPago = metodosPago; }
 }
