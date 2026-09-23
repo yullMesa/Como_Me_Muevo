@@ -73,52 +73,115 @@
     </main>
 </div>
 
-<!-- VENTANA EMERGENTE (MODAL) DEL CARRITO Y PAGOS -->
+<!-- VENTANA EMERGENTE (MODAL) DE DIRECTORIO Y TRANSPORTE -->
 <div id="cartModal" class="modal-overlay">
-    <div class="modal-container">
+    <div class="modal-container large-modal">
         <div class="modal-header">
-            <h3>🛒 Carrito y Sistema de Pago</h3>
+            <h3>🌐 Directorio y Guía de Transporte - ¿Cómo Me Muevo?</h3>
             <button id="closeModal" class="close-btn">&times;</button>
         </div>
         <div class="modal-body">
-            <!-- Sección de productos/recargas -->
-            <div class="cart-items-section">
-                <h4>Selecciona tu recarga o producto:</h4>
-                <div class="product-card">
-                    <span>Recarga Tarjeta (Valor: $20.000)</span>
-                    <button class="btn-add-item" data-name="Recarga $20k" data-price="20000">Agregar</button>
-                </div>
-                <div class="product-card">
-                    <span>Pase Libre Mensual (Valor: $80.000)</span>
-                    <button class="btn-add-item" data-name="Pase Mensual" data-price="80000">Agregar</button>
-                </div>
 
-                <div class="selected-items-list">
-                    <h5>Resumen de Compra:</h5>
-                    <ul id="itemList">
-                        <li>Tu carrito está vacío.</li>
-                    </ul>
-                    <p class="cart-total">Total a Pagar: $<span id="cartTotal">0</span></p>
-                </div>
+            <!-- Botón / Sección Superior: ¿Cómo pago? -->
+            <div class="como-pago-section">
+                <button id="btnComoPagoGuia" class="btn-como-pago-info">
+                    ❓ ¿Cómo pago? (Guía de recargas y tarifas)
+                </button>
             </div>
 
-            <!-- Sección de pago con tarjeta -->
-            <div class="checkout-section">
-                <h4>💳 Método de Pago</h4>
-                <form id="checkoutForm">
-                    <div class="form-group">
-                        <label>Tipo de Tarjeta:</label>
-                        <select id="tipoTarjeta" class="form-control">
-                            <option value="debito">Tarjeta Débito</option>
-                            <option value="credito">Tarjeta Crédito</option>
-                        </select>
+            <!-- Contenedor Grid 3x3 de Empresas (9 tarjetas según tu dibujo) -->
+            <div class="transport-grid-3x3">
+
+                <!-- Tarjeta 1 -->
+                <div class="transport-card-excalidraw">
+                    <img src="../Style/image/metro_icon.png" alt="MetroMovil" class="transport-img">
+                    <div class="transport-info">
+                        <span class="company-name">MetroMovil S.A.</span>
+                        <span class="product-desc">Recarga General / Tiquetes</span>
                     </div>
-                    <div class="form-group">
-                        <label>Número de Tarjeta:</label>
-                        <input type="text" id="numTarjeta" class="form-control" placeholder="1234 5678 9012 3456" maxlength="16" required>
+                    <a href="https://www.metromedellin.gov.co" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
+                </div>
+
+                <!-- Tarjeta 2 -->
+                <div class="transport-card-excalidraw">
+                    <img src="../Style/image/bus_icon.png" alt="TransitBus" class="transport-img">
+                    <div class="transport-info">
+                        <span class="company-name">TransitBus</span>
+                        <span class="product-desc">Pase Mensual / Rutas Urbanas</span>
                     </div>
-                    <button type="submit" class="btn-pay">Pagar Ahora</button>
-                </form>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
+                </div>
+
+                <!-- Tarjeta 3 -->
+                <div class="transport-card-excalidraw">
+                    <img src="../Style/image/train_icon.png" alt="VeloxExpress" class="transport-img">
+                    <div class="transport-info">
+                        <span class="company-name">VeloxExpress</span>
+                        <span class="product-desc">Tiquete Integrado / Expreso</span>
+                    </div>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
+                </div>
+
+                <!-- Tarjeta 4 -->
+                <div class="transport-card-excalidraw">
+                    <img src="../Style/image/urban_icon.png" alt="UrbanCab" class="transport-img">
+                    <div class="transport-info">
+                        <span class="company-name">UrbanCab</span>
+                        <span class="product-desc">Bono Preferencial / Conexión</span>
+                    </div>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
+                </div>
+
+                <!-- Tarjeta 5 -->
+                <div class="transport-card-excalidraw">
+                    <img src="../Style/image/plus_icon.png" alt="Movilidad Plus" class="transport-img">
+                    <div class="transport-info">
+                        <span class="company-name">Movilidad Plus</span>
+                        <span class="product-desc">Recarga Estudiantil / Zonal</span>
+                    </div>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
+                </div>
+
+                <!-- Tarjeta 6 -->
+                <div class="transport-card-excalidraw">
+                    <img src="../Style/image/eco_icon.png" alt="EcoRutas" class="transport-img">
+                    <div class="transport-info">
+                        <span class="company-name">EcoRutas</span>
+                        <span class="product-desc">Pase CicloRuta / Sostenible</span>
+                    </div>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
+                </div>
+
+                <!-- Tarjeta 7 -->
+                <div class="transport-card-excalidraw">
+                    <img src="../Style/image/global_icon.png" alt="GlobalTransit" class="transport-img">
+                    <div class="transport-info">
+                        <span class="company-name">GlobalTransit</span>
+                        <span class="product-desc">Tarjeta Turista / Global</span>
+                    </div>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
+                </div>
+
+                <!-- Tarjeta 8 -->
+                <div class="transport-card-excalidraw">
+                    <img src="../Style/image/sur_icon.png" alt="Conexión Sur" class="transport-img">
+                    <div class="transport-info">
+                        <span class="company-name">Conexión Sur</span>
+                        <span class="product-desc">Recarga Múltiple / Conexión</span>
+                    </div>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
+                </div>
+
+                <!-- Tarjeta 9 -->
+                <div class="transport-card-excalidraw">
+                    <img src="../Style/image/inter_icon.png" alt="MetroBus Inter" class="transport-img">
+                    <div class="transport-info">
+                        <span class="company-name">MetroBus Inter</span>
+                        <span class="product-desc">Pase Global Express</span>
+                    </div>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
+                </div>
+
             </div>
         </div>
     </div>

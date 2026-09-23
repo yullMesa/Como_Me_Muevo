@@ -475,6 +475,119 @@ body.dashboard-body {
 
 .btn-pay:hover {
     background: #0056b3;
+}/* Modal de mayor anchura para albergar el grid 3x3 */
+.modal-container.large-modal {
+    max-width: 850px;
+    width: 95%;
+}
+
+/* Modal amplio para el directorio */
+.modal-container.large-modal {
+    max-width: 900px;
+    width: 95%;
+}
+
+/* Sección superior de ¿Cómo pago? */
+.como-pago-section {
+    margin-bottom: 20px;
+}
+
+.btn-como-pago-info {
+    background: #e3342f;
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.2s;
+    box-shadow: 0 4px 10px rgba(227, 52, 47, 0.2);
+}
+
+.btn-como-pago-info:hover {
+    background: #cc1f1a;
+}
+
+/* Cuadrícula Grid 3x3 exacta */
+.transport-grid-3x3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* Tarjeta individual basada en tu boceto */
+.transport-card-excalidraw {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.transport-card-excalidraw:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+/* Imagen superior de la tarjeta */
+.transport-img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background: #ffffff;
+    padding: 4px;
+    border: 1px solid #e9ecef;
+}
+
+/* Textos de la empresa y producto */
+.transport-info {
+    margin-bottom: 12px;
+}
+
+.company-name {
+    display: block;
+    font-weight: 700;
+    color: #1f1f1f;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+}
+
+.product-desc {
+    display: block;
+    color: #6c757d;
+    font-size: 0.8rem;
+    line-height: 1.2;
+}
+
+/* Botón ancla "IR" que abre en otra pestaña sin cerrar la app */
+.btn-ir {
+    display: inline-block;
+    background: #0284c7;
+    color: white;
+    text-decoration: none;
+    padding: 6px 20px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+    width: 80%;
+}
+
+.btn-ir:hover {
+    background: #0369a1;
 }
 
 
