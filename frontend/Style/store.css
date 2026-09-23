@@ -1,0 +1,127 @@
+/* Estilos para la Tienda usando la paleta oficial de Move.css */
+.store-body {
+    background-color: var(--negro, #1F1F1F);
+    color: var(--blanco, #FFFFFF);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.store-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.store-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #2a2a2a;
+    padding: 20px 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    border: 1px solid #333333;
+}
+
+.store-title-area h1 {
+    margin: 0 0 5px 0;
+    font-size: 1.5rem;
+    color: var(--blanco, #FFFFFF);
+}
+
+.store-title-area p {
+    margin: 0;
+    color: var(--gris-claro, #E5E5E5);
+    font-size: 0.9rem;
+}
+
+.btn-volver {
+    background: var(--gris-oscuro, #555555);
+    color: var(--blanco, #FFFFFF);
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.btn-volver:hover {
+    background: #666666;
+}
+
+.store-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.store-card {
+    background: #2a2a2a;
+    border-radius: 12px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    border: 1px solid #333333;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.store-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+}
+
+.store-card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    background: #333333;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.store-card-content h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    color: var(--blanco, #FFFFFF);
+}
+
+.store-card-content p {
+    color: var(--gris-claro, #E5E5E5);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-bottom: 15px;
+}
+
+.store-price {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--rojo-principal, #E21B23);
+    margin-bottom: 20px;
+}
+
+.btn-comprar {
+    background: var(--rojo-principal, #E21B23);
+    color: var(--blanco, #FFFFFF);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+}
+
+.btn-comprar:hover {
+    background: var(--rojo-oscuro, #C9141C);
+}

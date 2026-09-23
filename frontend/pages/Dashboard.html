@@ -5,14 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cómo Me Muevo - Panel Principal</title>
     <link rel="stylesheet" href="../Style/Usuario.css">
-    
     <link rel="shortcut icon" href="../Style/image/How_favicon.png" type="image/x-icon">
     <!-- Estilos CSS de Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
 </head>
 <body class="dashboard-body">
-
 <div class="app-container">
     <!-- BARRA LATERAL (SIDEBAR) -->
     <aside class="sidebar">
@@ -23,7 +20,6 @@
                 <span>Tu ciudad, más conectada</span>
             </div>
         </div>
-
         <nav class="sidebar-nav">
             <a href="#" class="nav-item active" data-view="inicio">
                 <span class="icon">🏠</span> Inicio
@@ -44,7 +40,6 @@
                 <span class="icon">👤</span> Perfil
             </a>
         </nav>
-
         <div class="sidebar-footer">
             <a href="Login.html" id="btnLogout" class="nav-item logout">
                 <span class="icon">■</span> Cerrar sesión
@@ -58,11 +53,11 @@
         <header class="dashboard-header">
             <button id="menuToggle" class="menu-toggle">☰</button>
             <div class="user-menu">
-                <!-- Botón de Carrito de Compras para Transacciones -->
-                <button id="btnCarrito" class="cart-btn" title="Ver Carrito de Compras">
-                    🛒 <span class="badge-count" id="cartCount">0</span>
-                </button>
-                <span class="user-name" id="nombreUsuario">Comprar!!</span>
+                <!-- Botón que redirige a la tienda en una pestaña nueva -->
+                <a href="tienda.html" target="_blank" rel="noopener noreferrer" id="btnIrTienda" class="cart-btn-link" title="Abrir Tienda y Recargas">
+                    🛒 <span class="badge-count" id="cartCountTienda">Tienda</span>
+                </a>
+                <span class="user-name" id="nombreUsuarioHeader">¡Ir a Tienda!</span>
             </div>
         </header>
 
@@ -73,120 +68,7 @@
     </main>
 </div>
 
-<!-- VENTANA EMERGENTE (MODAL) DE DIRECTORIO Y TRANSPORTE -->
-<div id="cartModal" class="modal-overlay">
-    <div class="modal-container large-modal">
-        <div class="modal-header">
-            <h3>🌐 Directorio y Guía de Transporte - ¿Cómo Me Muevo?</h3>
-            <button id="closeModal" class="close-btn">&times;</button>
-        </div>
-        <div class="modal-body">
-
-            <!-- Botón / Sección Superior: ¿Cómo pago? -->
-            <div class="como-pago-section">
-                <button id="btnComoPagoGuia" class="btn-como-pago-info">
-                    ❓ ¿Cómo pago? (Guía de recargas y tarifas)
-                </button>
-            </div>
-
-            <!-- Contenedor Grid 3x3 de Empresas (9 tarjetas según tu dibujo) -->
-            <div class="transport-grid-3x3">
-
-                <!-- Tarjeta 1 -->
-                <div class="transport-card-excalidraw">
-                    <img src="../Style/image/metro_icon.png" alt="MetroMovil" class="transport-img">
-                    <div class="transport-info">
-                        <span class="company-name">MetroMovil S.A.</span>
-                        <span class="product-desc">Recarga General / Tiquetes</span>
-                    </div>
-                    <a href="https://www.metromedellin.gov.co" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
-                </div>
-
-                <!-- Tarjeta 2 -->
-                <div class="transport-card-excalidraw">
-                    <img src="../Style/image/bus_icon.png" alt="TransitBus" class="transport-img">
-                    <div class="transport-info">
-                        <span class="company-name">TransitBus</span>
-                        <span class="product-desc">Pase Mensual / Rutas Urbanas</span>
-                    </div>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
-                </div>
-
-                <!-- Tarjeta 3 -->
-                <div class="transport-card-excalidraw">
-                    <img src="../Style/image/train_icon.png" alt="VeloxExpress" class="transport-img">
-                    <div class="transport-info">
-                        <span class="company-name">VeloxExpress</span>
-                        <span class="product-desc">Tiquete Integrado / Expreso</span>
-                    </div>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
-                </div>
-
-                <!-- Tarjeta 4 -->
-                <div class="transport-card-excalidraw">
-                    <img src="../Style/image/urban_icon.png" alt="UrbanCab" class="transport-img">
-                    <div class="transport-info">
-                        <span class="company-name">UrbanCab</span>
-                        <span class="product-desc">Bono Preferencial / Conexión</span>
-                    </div>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
-                </div>
-
-                <!-- Tarjeta 5 -->
-                <div class="transport-card-excalidraw">
-                    <img src="../Style/image/plus_icon.png" alt="Movilidad Plus" class="transport-img">
-                    <div class="transport-info">
-                        <span class="company-name">Movilidad Plus</span>
-                        <span class="product-desc">Recarga Estudiantil / Zonal</span>
-                    </div>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
-                </div>
-
-                <!-- Tarjeta 6 -->
-                <div class="transport-card-excalidraw">
-                    <img src="../Style/image/eco_icon.png" alt="EcoRutas" class="transport-img">
-                    <div class="transport-info">
-                        <span class="company-name">EcoRutas</span>
-                        <span class="product-desc">Pase CicloRuta / Sostenible</span>
-                    </div>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
-                </div>
-
-                <!-- Tarjeta 7 -->
-                <div class="transport-card-excalidraw">
-                    <img src="../Style/image/global_icon.png" alt="GlobalTransit" class="transport-img">
-                    <div class="transport-info">
-                        <span class="company-name">GlobalTransit</span>
-                        <span class="product-desc">Tarjeta Turista / Global</span>
-                    </div>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
-                </div>
-
-                <!-- Tarjeta 8 -->
-                <div class="transport-card-excalidraw">
-                    <img src="../Style/image/sur_icon.png" alt="Conexión Sur" class="transport-img">
-                    <div class="transport-info">
-                        <span class="company-name">Conexión Sur</span>
-                        <span class="product-desc">Recarga Múltiple / Conexión</span>
-                    </div>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
-                </div>
-
-                <!-- Tarjeta 9 -->
-                <div class="transport-card-excalidraw">
-                    <img src="../Style/image/inter_icon.png" alt="MetroBus Inter" class="transport-img">
-                    <div class="transport-info">
-                        <span class="company-name">MetroBus Inter</span>
-                        <span class="product-desc">Pase Global Express</span>
-                    </div>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-ir">IR</a>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-
+<!-- Scripts -->
 <script type="module" src="../vanilla/dashboard.js"></script>
 <!-- Script JS de Leaflet -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
