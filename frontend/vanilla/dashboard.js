@@ -3,6 +3,7 @@ import { renderReportes } from './views/reportes.js';
 import { renderInicio } from './views/inicio.js';
 import { renderRutas } from './views/rutas.js';
 import { renderHistorialRutas } from './views/HistorialRutas.js';
+import { renderNotificaciones } from './views/notificaciones.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // 🛡️ PASO DE SEGURIDAD: Verificamos si hay una sesión activa antes de cargar el panel
@@ -42,7 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'perfil': renderPerfil,
         'reportes': renderReportes,
         'rutas': renderRutas,
-        'rutas-realizadas': renderHistorialRutas
+        'rutas-realizadas': renderHistorialRutas,
+        'notificaciones': renderNotificaciones
     };
 
     function loadRoute(viewName) {
