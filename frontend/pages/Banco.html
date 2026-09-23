@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como Pago - Banca Digital Inteligente</title>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Favicon opcional -->
+    <link rel="shortcut icon" href="../Style/image/How_favicon.png" type="image/x-icon">
+    <style>
+        :root {
+            --rojo-principal: #E21B23;
+            --rojo-oscuro: #C9414C;
+        }
+        .bg-primary-custom {
+            background-color: var(--rojo-principal) !important;
+        }
+        .text-primary-custom {
+            color: var(--rojo-principal) !important;
+        }
+        .btn-custom {
+            background-color: var(--rojo-principal);
+            color: white;
+            font-weight: 600;
+        }
+        .btn-custom:hover {
+            background-color: var(--rojo-oscuro);
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+<!-- BARRA DE NAVEGACIÓN -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+            <span class="badge bg-primary-custom fs-5">💳</span>
+            <span class="fw-bold">Banco Como Pago</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav align-items-center gap-3">
+                <li class="nav-item"><a class="nav-link active" href="#">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
+                <li class="nav-item"><a class="nav-link" href="#tarjetas">Tarjetas</a></li>
+                <li class="nav-item">
+                    <a href="Dashboard.html" class="btn btn-outline-light btn-sm px-3">Volver a ¿Cómo Me Muevo?</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- CONTENEDOR PRINCIPAL (LISTO PARA JS) -->
+<main id="bancoMainContent" class="flex-grow-1">
+
+    <!-- HERO SECTION -->
+    <section class="bg-white py-5 border-bottom">
+        <div class="container py-4">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <span class="badge bg-danger bg-opacity-15 text-danger mb-2 px-3 py-2 rounded-pill fw-semibold">Banca 100% Digital y Segura</span>
+                    <h1 class="display-4 fw-bold text-dark mb-3">Tu dinero y movilidad conectados en un solo lugar</h1>
+                    <p class="lead text-secondary mb-4">Administra tus tarjetas, realiza recargas instantáneas para tu transporte y gestiona tus finanzas personales de manera ágil con el respaldo de <strong>Como Pago</strong>.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#tarjetas" class="btn btn-custom btn-lg px-4 shadow-sm">Ver Tarjetas</a>
+                        <a href="#servicios" class="btn btn-outline-dark btn-lg px-4">Explorar Servicios</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <div class="p-4 bg-light rounded-4 shadow-sm border">
+                        <h3 class="h5 fw-bold text-dark mb-3">Acceso Rápido a Cuenta</h3>
+                        <p class="text-muted small mb-3">Ingresa tu código de recarga o verifica el estado de tu sesión activa.</p>
+                        <div class="input-group mb-3">
+                            <input type="text" id="inputCodigoBanco" class="form-control" placeholder="Código de recarga o cédula...">
+                            <button class="btn btn-dark" type="button" id="btnConsultarBanco">Consultar</button>
+                        </div>
+                        <div id="resultadoConsultaBanco" class="text-start small text-secondary mt-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN DE SERVICIOS -->
+    <section id="servicios" class="py-5">
+        <div class="container py-4">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-dark">Nuestros Servicios Financieros</h2>
+                <p class="text-muted">Diseñados para facilitarte la vida diaria en la ciudad.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-3 rounded-4">
+                        <div class="card-body">
+                            <div class="fs-1 mb-3">⚡</div>
+                            <h4 class="h5 fw-bold">Recargas Instantáneas</h4>
+                            <p class="text-muted small">Abona dinero a tus medios de transporte y tarjetas asociadas de forma inmediata mediante códigos seguros.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-3 rounded-4">
+                        <div class="card-body">
+                            <div class="fs-1 mb-3">🛡️</div>
+                            <h4 class="h5 fw-bold">Seguridad Encriptada</h4>
+                            <p class="text-muted small">Protección de datos bajo estándares avanzados y validación estricta por sesión de usuario.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-3 rounded-4">
+                        <div class="card-body">
+                            <div class="fs-1 mb-3">📱</div>
+                            <h4 class="h5 fw-bold">Gestión Móvil y Web</h4>
+                            <p class="text-muted small">Sincronización en tiempo real con tu panel de transporte en ¿Cómo Me Muevo? sin complicaciones.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN DE TARJETAS -->
+    <!-- SECCIÓN DE TARJETAS -->
+    <section id="tarjetas" class="py-5 bg-white border-top">
+        <div class="container py-4">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-dark">Tarjetas y Medios de Pago</h2>
+                <p class="text-muted">Escoge el tipo de producto financiero que mejor se adapte a tus necesidades de movilidad y pagos.</p>
+            </div>
+            <div class="row g-4 justify-content-center">
+
+                <!-- Tarjeta 1: Cuenta de Ahorros -->
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-lg rounded-4 overflow-hidden text-white bg-dark h-100">
+                        <div class="card-body p-4 d-flex flex-column justify-content-between">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <span class="fw-bold fs-6">COMO PAGO</span>
+                                <span class="badge bg-success">Ahorros</span>
+                            </div>
+                            <div class="mb-4">
+                                <div class="fs-5 tracking-wider font-monospace">**** **** **** 4012</div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-end">
+                                <div>
+                                    <small class="text-white-50 d-block" style="font-size: 0.75rem;">Titular</small>
+                                    <span class="fw-semibold small">Usuario Activo</span>
+                                </div>
+                                <div>
+                                    <small class="text-white-50 d-block text-end" style="font-size: 0.75rem;">Saldo</small>
+                                    <span class="fw-bold text-success fs-6">$ 0 COP</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: Cuenta Corriente -->
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-lg rounded-4 overflow-hidden text-white bg-secondary h-100">
+                        <div class="card-body p-4 d-flex flex-column justify-content-between">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <span class="fw-bold fs-6">COMO PAGO</span>
+                                <span class="badge bg-light text-dark">Corriente</span>
+                            </div>
+                            <div class="mb-4">
+                                <div class="fs-5 tracking-wider font-monospace">**** **** **** 7091</div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-end">
+                                <div>
+                                    <small class="text-white-50 d-block" style="font-size: 0.75rem;">Titular</small>
+                                    <span class="fw-semibold small">Usuario Activo</span>
+                                </div>
+                                <div>
+                                    <small class="text-white-50 d-block text-end" style="font-size: 0.75rem;">Cupo Diario</small>
+                                    <span class="fw-bold text-info fs-6">Disponible</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 3: Tarjeta de Crédito -->
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-lg rounded-4 overflow-hidden text-white bg-primary-custom h-100">
+                        <div class="card-body p-4 d-flex flex-column justify-content-between">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <span class="fw-bold fs-6">COMO PAGO MÁS</span>
+                                <span class="badge bg-dark">Crédito</span>
+                            </div>
+                            <div class="mb-4">
+                                <div class="fs-5 tracking-wider font-monospace">**** **** **** 3310</div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-end">
+                                <div>
+                                    <small class="text-white-50 d-block" style="font-size: 0.75rem;">Titular</small>
+                                    <span class="fw-semibold small">Ciudadano Conectado</span>
+                                </div>
+                                <div>
+                                    <small class="text-white-50 d-block text-end" style="font-size: 0.75rem;">Cupo Aprobado</small>
+                                    <span class="fw-bold fs-6">$ 1.5M COP</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-dark text-white text-center py-4 mt-auto">
+    <div class="container">
+        <p class="mb-1">&copy; 2026 Banco Como Pago • Integrado con ¿Cómo Me Muevo?</p>
+        <small class="text-white-50">Todos los derechos reservados.</small>
+    </div>
+</footer>
+
+<!-- Bootstrap 5 JS Bundle CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -24,21 +24,23 @@ export function renderNotificaciones(container) {
                 </div>
 
                 <!-- TEMAS BANCARIOS / TARJETA -->
-                <div style="background: #ffffff; padding: 20px; border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div>
-                            <div style="display: flex; align-items: center; gap: 8px; color: #E21B23; font-weight: bold; margin-bottom: 5px;">
-                                <span>💳</span> Temas bancarios
-                            </div>
-                            <p style="margin: 0; color: #6b7280; font-size: 0.85rem;">Consulta información sobre pagos, recargas y servicios financieros.</p>
-                        </div>
-                        <a href="tienda.html" target="_blank" style="text-decoration: none; color: #9ca3af; font-weight: bold;">›</a>
-                    </div>
-                    
-                    <div id="infoBancoResumen" style="background: #fdf2f2; border: 1px solid #fecaca; padding: 12px; border-radius: 8px; margin-top: 15px; color: #991b1b; font-size: 0.9rem;">
-                        Verificando estado de tu cuenta y tarjetas...
-                    </div>
-                </div>
+                
+               <div style="background: #ffffff; padding: 20px; border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between;">
+                   <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                       <div>
+                           <div style="display: flex; align-items: center; gap: 8px; color: #E21B23; font-weight: bold; margin-bottom: 5px;">
+                               <span>💳</span> Temas bancarios
+                           </div>
+                           <p style="margin: 0; color: #6b7280; font-size: 0.85rem;">Consulta información sobre pagos, recargas y servicios financieros.</p>
+                       </div>
+                       <!-- Redirige al HTML del banco que creaste (ej: banco.html) -->
+                       <a href="banco.html" target="_blank" style="text-decoration: none; color: #E21B23; font-weight: bold; font-size: 1.1rem;" title="Ir al Banco">›</a>
+                   </div>
+                  
+                   <div id="infoBancoResumen" style="background: #fdf2f2; border: 1px solid #fecaca; padding: 12px; border-radius: 8px; margin-top: 15px; color: #991b1b; font-size: 0.9rem;">
+                       Verificando estado de tu cuenta y tarjetas...
+                   </div>
+               </div>
 
             </div>
 
@@ -148,14 +150,15 @@ async function cargarDatosBancariosUsuarioLogueado() {
             if (tarjetas && tarjetas.length > 0) {
                 const t = tarjetas[0];
                 contenedorBanco.innerHTML = `
-                    <strong>Tarjeta Activa:</strong> ${t.numeroTarjeta}<br>
-                    <strong>Saldo Disponible:</strong> <span style="color: #16a34a; font-weight: bold;">$ ${t.saldo.toLocaleString()}</span>
-                `;
+                   <strong>Tarjeta Activa:</strong> ${t.numeroTarjeta}<br>
+                   <strong>Saldo Disponible:</strong> <span style="color: #16a34a; font-weight: bold;">$ ${t.saldo.toLocaleString()}</span>
+               `;
                 contenedorBanco.style.background = "#f0fdf4";
                 contenedorBanco.style.borderColor = "#bbf7d0";
                 contenedorBanco.style.color = "#166534";
             } else {
-                contenedorBanco.innerHTML = `No tienes tarjetas asociadas. <a href="tienda.html" target="_blank" style="color: #E21B23; font-weight: bold;">¡Solicita una aquí!</a>`;
+                // Redirige al banco.html en lugar de la tienda
+                contenedorBanco.innerHTML = `No tienes cuentas asociadas. <a href="banco.html" target="_blank" style="color: #E21B23; font-weight: bold;">¡Entra al Banco aquí!</a>`;
             }
         }
     } catch (e) {
