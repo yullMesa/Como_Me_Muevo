@@ -4,64 +4,149 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tienda Oficial - ¿Cómo Me Muevo?</title>
-    <!-- Importamos Move.css para heredar las variables de color -->
+    <!-- Importamos la paleta de colores corporativa -->
     <link rel="stylesheet" href="../Style/Move.css">
-    <!-- Tus estilos de la tienda -->
     <link rel="stylesheet" href="../Style/store.css">
     <link rel="shortcut icon" href="../Style/image/How_favicon.png" type="image/x-icon">
 </head>
-<body class="store-body">
+<body class="store-layout-body">
 
-<div class="store-container">
-    <!-- Cabecera de la Tienda -->
-    <header class="store-header">
-        <div class="store-title-area">
-            <h1>🛍️ Tienda y Recargas - ¿Cómo Me Muevo?</h1>
-            <p>Adquiere tus recargas, pases y beneficios de movilidad de forma rápida y segura.</p>
+<!-- CONTENEDOR GENERAL DE LA TIENDA -->
+<div class="store-app-container">
+
+    <!-- MENÚ LATERAL DE CATEGORÍAS -->
+    <aside class="store-sidebar">
+        <div class="store-logo-area">
+            <h2>🛍️ Tienda C.M.M.</h2>
+            <span>Servicios y Souvenirs</span>
         </div>
-        <div class="store-nav-action">
-            <a href="Dashboard.html" class="btn-volver">← Volver al Panel</a>
+
+        <nav class="store-nav">
+            <a href="#" class="store-nav-item active" onclick="filtrarCategoria('todos', event)">
+                <span class="icon">📦</span> Todos los productos
+            </a>
+            <a href="#" class="store-nav-item" onclick="filtrarCategoria('accesorios', event)">
+                <span class="icon">🎒</span> Accesorios
+            </a>
+            <a href="#" class="store-nav-item" onclick="filtrarCategoria('souvenirs', event)">
+                <span class="icon">🎁</span> Souvenirs
+            </a>
+            <a href="#" class="store-nav-item" onclick="filtrarCategoria('recargas', event)">
+                <span class="icon">💳</span> Tarjetas y recargas
+            </a>
+            <a href="#" class="store-nav-item" onclick="filtrarCategoria('ropa', event)">
+                <span class="icon">👕</span> Ropa
+            </a>
+            <a href="#" class="store-nav-item" onclick="filtrarCategoria('tecnologia', event)">
+                <span class="icon">📱</span> Tecnología
+            </a>
+            <a href="#" class="store-nav-item" onclick="filtrarCategoria('otros', event)">
+                <span class="icon">⋯</span> Otros
+            </a>
+        </nav>
+
+        <div class="store-sidebar-footer">
+            <a href="Dashboard.html" class="btn-volver-dashboard">← Volver al Panel</a>
         </div>
-    </header>
+    </aside>
 
-    <!-- Cuadrícula de Productos / Servicios -->
-    <main class="store-grid">
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="store-main-content">
 
-        <!-- Producto 1: Recarga Cívica -->
-        <div class="store-card">
-            <div class="store-card-icon">💳</div>
-            <div class="store-card-content">
-                <h3>Recarga Tarjeta Cívica</h3>
-                <p>Recarga saldo para el sistema de transporte integrado con un descuento exclusivo del 5%.</p>
-                <span class="store-price">$20.000 COP</span>
-                <button class="btn-comprar" onclick="alert('¡Compra simulada con éxito! Tu recarga de Cívica está en proceso.')">Comprar Recarga</button>
+        <!-- Barra superior: Buscador y Filtro de orden -->
+        <header class="store-topbar">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Buscar productos..." id="inputBuscador">
             </div>
-        </div>
-
-        <!-- Producto 2: Pase Mensual -->
-        <div class="store-card">
-            <div class="store-card-icon">🎟️</div>
-            <div class="store-card-content">
-                <h3>Pase Mensual Estudiantil</h3>
-                <p>Acceso ilimitado a rutas zonales y alimentadoras durante 30 días hábiles continuos.</p>
-                <span class="store-price">$75.000 COP</span>
-                <button class="btn-comprar" onclick="alert('¡Pase mensual adquirido correctamente!')">Adquirir Pase</button>
+            <div class="filter-box">
+                <select id="selectOrden">
+                    <option value="populares">Más populares</option>
+                    <option value="menor-precio">Menor precio</option>
+                    <option value="mayor-precio">Mayor precio</option>
+                </select>
             </div>
-        </div>
+        </header>
 
-        <!-- Producto 3: Tiquete Integrado -->
-        <div class="store-card">
-            <div class="store-card-icon">🚌</div>
-            <div class="store-card-content">
-                <h3>Paquete Tiquetes Exprés</h3>
-                <p>Paquete de 5 tiquetes integrados para transbordos rápidos sin hacer filas en taquilla.</p>
-                <span class="store-price">$14.500 COP</span>
-                <button class="btn-comprar" onclick="alert('¡Paquete de tiquetes agregado y pagado con éxito!')">Comprar Paquete</button>
+        <!-- Cuadrícula (Grid) de Productos -->
+        <div class="store-grid" id="gridProductos">
+
+            <!-- Producto de ejemplo 1 -->
+            <div class="product-card" data-categoria="recargas">
+                <div class="product-img-container">
+                    <img src="../Style/image/tarjeta_icon.png" alt="Tarjeta de movilidad" onerror="this.onerror=null; this.src=''; this.parentNode.innerHTML='<div class=\'img-fallback\'>💳 Sin Imagen</div>';">
+                </div>
+                <div class="product-info">
+                    <h3>Tarjeta de movilidad</h3>
+                    <p>Tarjeta recarcable para el sistema de transporte integrado.</p>
+                    <span class="product-price">$ 25.000</span>
+                    <button class="btn-agregar-carrito" onclick="alert('Producto agregado al carrito de simulación')">🛒 Agregar al carrito</button>
+                </div>
             </div>
-        </div>
 
+            <!-- Producto de ejemplo 2 -->
+            <div class="product-card" data-categoria="accesorios">
+                <div class="product-img-container">
+                    <img src="../Style/image/botella_icon.png" alt="Botella de agua" onerror="this.onerror=null; this.src=''; this.parentNode.innerHTML='<div class=\'img-fallback\'>💧 Sin Imagen</div>';">
+                </div>
+                <div class="product-info">
+                    <h3>Botella de agua</h3>
+                    <p>Mantén tu hidratación en cada trayecto, 600 ml.</p>
+                    <span class="product-price">$ 35.000</span>
+                    <button class="btn-agregar-carrito" onclick="alert('Producto agregado al carrito de simulación')">🛒 Agregar al carrito</button>
+                </div>
+            </div>
+
+            <!-- Producto de ejemplo 3 -->
+            <div class="product-card" data-categoria="ropa">
+                <div class="product-img-container">
+                    <img src="../Style/image/gorra_icon.png" alt="Gorra" onerror="this.onerror=null; this.src=''; this.parentNode.innerHTML='<div class=\'img-fallback\'>🧢 Sin Imagen</div>';">
+                </div>
+                <div class="product-info">
+                    <h3>Gorra corporativa</h3>
+                    <p>Estilo y comodidad para tus recorridos por la ciudad.</p>
+                    <span class="product-price">$ 45.000</span>
+                    <button class="btn-agregar-carrito" onclick="alert('Producto agregado al carrito de simulación')">🛒 Agregar al carrito</button>
+                </div>
+            </div>
+
+            <!-- Producto de ejemplo 4 -->
+            <div class="product-card" data-categoria="souvenirs">
+                <div class="product-img-container">
+                    <img src="../Style/image/bolsa_icon.png" alt="Bolsa ecológica" onerror="this.onerror=null; this.src=''; this.parentNode.innerHTML='<div class=\'img-fallback\'>👜 Sin Imagen</div>';">
+                </div>
+                <div class="product-info">
+                    <h3>Bolsa ecológica</h3>
+                    <p>Lleva lo que necesitas con la identidad de la app.</p>
+                    <span class="product-price">$ 28.000</span>
+                    <button class="btn-agregar-carrito" onclick="alert('Producto agregado al carrito de simulación')">🛒 Agregar al carrito</button>
+                </div>
+            </div>
+
+        </div>
     </main>
 </div>
 
+<!-- Script sencillo para el menú lateral -->
+<script>
+    function filtrarCategoria(categoria, evento) {
+        evento.preventDefault();
+
+        // Cambiar clase activa en el menú
+        document.querySelectorAll('.store-nav-item').forEach(el => el.classList.remove('active'));
+        evento.currentTarget.classList.add('active');
+
+        // Filtrar tarjetas
+        const tarjetas = document.querySelectorAll('.product-card');
+        tarjetas.forEach(tarjeta => {
+            const catCard = tarjeta.getAttribute('data-categoria');
+            if (categoria === 'todos' || catCard === categoria) {
+                tarjeta.style.display = 'flex';
+            } else {
+                tarjeta.style.display = 'none';
+            }
+        });
+    }
+</script>
 </body>
 </html>
