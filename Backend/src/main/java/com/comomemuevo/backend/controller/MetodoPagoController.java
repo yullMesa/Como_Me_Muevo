@@ -49,4 +49,47 @@ public class MetodoPagoController {
 
         return ResponseEntity.ok("Tarjeta de " + tipo + " creada exitosamente.");
     }
+
+    @PostMapping("/actualizar-saldo")
+    public ResponseEntity<?> actualizarSaldo(
+            @RequestParam String correo,
+            @RequestParam String numeroTarjeta,
+            @RequestParam double monto,
+            @RequestParam boolean esGasto) { // true si es una compra/resta, false si es una consignación/abono
+
+        Usuario usuario = usuarioRepository.findByCorreo(correo);
+        if (usuario == null) {
+            return ResponseEntity.status(404).body("Usuario no encontrado.");
+        }
+
+        List<MetodoPago> tarjetas = metodoPagoRepository.findByUsuarioId(usuario.getId());
+        MetodoPago tarjetaEncontrada = null;
+
+        for (MetodoPago t : tarjetas) {
+            if (t.getNumeroTarjeta().equals(numeroTarjeta)) {
+                tarjetaEncontrada = t;
+                break;
+            }
+        }
+
+        if (tarjetaEncontrada == null) {
+            return ResponseEntity.status(404).body("Tarjeta no encontrada.");
+        }
+
+        double saldoActual = tarjetaEncontrada.getSaldo();
+        double nuevoSaldo = esGasto ? (saldoActual - monto) : (saldoActual + monto);
+
+        // Regla de negocio: Ahorros y Corriente no pueden tener saldo negativo
+        if (!tarjetaEncontrada.getTipo().equalsIgnoreCase("Crédito")) {
+            if (nuevoSaldo < 0) {
+                return ResponseEntity.badRequest().body("Operación rechazada: Las cuentas de " + tarjetaEncontrada.getTipo() + " no pueden tener saldo negativo.");
+            }
+        }
+
+        // Actualizar y guardar en la base de datos
+        tarjetaEncontrada.setSaldo(nuevoSaldo);
+        metodoPagoRepository.save(tarjetaEncontrada);
+
+        return ResponseEntity.ok(tarjetaEncontrada);
+    }
 }

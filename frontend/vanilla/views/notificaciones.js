@@ -224,4 +224,12 @@ function reproducirSonidoAlerta() {
     } catch (e) {
         console.log("Audio omitido por políticas del navegador", e);
     }
+
+    // Escuchar cambios en el localStorage en tiempo real (si se genera un código en otra pestaña como la tienda)
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'codigoConsignacionActivo') {
+            // Volvemos a consultar y renderizar el widget bancario automáticamente
+            cargarDatosBancariosUsuarioLogueado();
+        }
+    });
 }

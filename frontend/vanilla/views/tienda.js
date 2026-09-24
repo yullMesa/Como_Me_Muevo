@@ -231,21 +231,22 @@ document.addEventListener('DOMContentLoaded', () => {
     window.pedirCodigoConsignacionBackend = function() {
         const tokenRef = `REF-CONSIGNACION-${Math.floor(100000 + Math.random() * 900000)}`;
 
-        // 1. Guardar el objeto con el código y la expiración (3 minutos) en el localStorage
         const datosToken = {
             codigo: tokenRef,
+            tipoTarjeta: window.tarjetaActivaGlobal ? window.tarjetaActivaGlobal.tipo : 'Ahorros',
+            numeroTarjeta: window.tarjetaActivaGlobal ? window.tarjetaActivaGlobal.numeroTarjeta : '****',
             expiracion: Date.now() + (3 * 60 * 1000)
         };
         localStorage.setItem('codigoConsignacionActivo', JSON.stringify(datosToken));
 
-        // 2. Mostrarlo visualmente dentro del modal de la tienda
         document.getElementById('contenedorBotonAccion').innerHTML = `
-          <div style="background:#065f46; padding:10px; border-radius:6px; font-size:0.8rem; text-align:center;">
-              <span style="display:block; color:#a7f3d0; margin-bottom:4px;">Código temporal (Expira en 3 min):</span>
-              <strong style="font-family:monospace; font-size:0.95rem; color:#fff;">${tokenRef}</strong>
-          </div>
-      `;
+         <div style="background:#065f46; padding:10px; border-radius:6px; font-size:0.8rem; text-align:center;">
+             <span style="display:block; color:#a7f3d0; margin-bottom:4px;">Código temporal (Expira en 3 min):</span>
+             <strong style="font-family:monospace; font-size:0.95rem; color:#fff;">${tokenRef}</strong>
+         </div>
+     `;
     };
+
 
     window.ejecutarCompraValidada = function() {
         const t = window.tarjetaActivaGlobal;
