@@ -1,99 +1,102 @@
-// --- MÓDULO DE TRANSFERENCIAS ENTRE CUENTAS ---
-document.addEventListener('DOMContentLoaded', async () => {
-    const selectOrigen = document.getElementById('selectOrigen');
-    const selectDestino = document.getElementById('selectDestino');
-    const formTransferencia = document.getElementById('formTransferencia');
-    const correoUsuario = localStorage.getItem('userEmail') || localStorage.getItem('correoUsuario') || localStorage.getItem('correo');
+// --- MÓDULO DE CONSULTA Y REDENCIÓN DE CÓDIGOS (DEPURADO) ---
+document.addEventListener('DOMContentLoaded', () => {
+    const btnConsultar = document.getElementById('btnConsultarCodigo');
+    const inputCodigo = document.getElementById('inputCodigoRef');
 
-    let misTarjetas = [];
+    if (!btnConsultar || !inputCodigo) {
+        console.warn("⚠️ Advertencia: No se encontró 'btnConsultarCodigo' o 'inputCodigoRef' en el HTML de esta página.");
+        return;
+    }
 
-    // 1. Cargar las tarjetas del usuario desde el backend al iniciar la vista
-    if (correoUsuario && selectOrigen && selectDestino) {
-        try {
-            const response = await fetch(`http://localhost:8080/api/pagos/tarjetas?correo=${encodeURIComponent(correoUsuario)}`);
-            if (response.ok) {
-                misTarjetas = await response.json();
+    btnConsultar.addEventListener('click', async () => {
+        const codigoIngresado = inputCodigo.value.trim();
+        console.log("🔍 Intentando validar código:", codigoIngresado);
 
-                selectOrigen.innerHTML = '<option value="">Selecciona origen...</option>';
-                selectDestino.innerHTML = '<option value="">Selecciona destino...</option>';
+        const ahora = Date.now();
+        let controlIntentos = JSON.parse(localStorage.getItem('controlIntentosBanco')) || { intentos: [], bloqueoHasta: 0 };
 
-                misTarjetas.forEach(t => {
-                    const optionText = `${t.tipo} (${t.numeroTarjeta}) - Saldo: $${t.saldo.toLocaleString()}`;
-                    selectOrigen.innerHTML += `<option value="${t.numeroTarjeta}">${optionText}</option>`;
-                    selectDestino.innerHTML += `<option value="${t.numeroTarjeta}">${optionText}</option>`;
-                });
-            } else {
-                selectOrigen.innerHTML = '<option value="">No se encontraron cuentas</option>';
-                selectDestino.innerHTML = '<option value="">No se encontraron cuentas</option>';
-            }
-        } catch (e) {
-            console.error("Error al cargar tarjetas para transferencias", e);
+        // 1. Verificar bloqueo de 1 minuto por superar 3 intentos
+        if (ahora < controlIntentos.bloqueoHasta) {
+            const segundosRestantes = Math.ceil((controlIntentos.bloqueoHasta - ahora) / 1000);
+            alert(`⏳ Límite alcanzado. Debes esperar ${segundosRestantes} segundos para volver a enviar un código.`);
+            return;
         }
-    }
 
-    // 2. Manejar el evento de enviar el formulario de transferencia
-    if (formTransferencia) {
-        formTransferencia.addEventListener('submit', async (e) => {
-            e.preventDefault();
+        // 2. Filtrar intentos dentro de la ventana de 1 minuto (60000 ms)
+        controlIntentos.intentos = controlIntentos.intentos.filter(timestamp => (ahora - timestamp) < 60000);
 
-            const numOrigen = selectOrigen.value;
-            const numDestino = selectDestino.value;
-            const monto = parseFloat(document.getElementById('inputMontoTransferencia').value);
+        // 3. Controlar máximo 3 intentos consecutivos por minuto
+        if (controlIntentos.intentos.length >= 3) {
+            controlIntentos.bloqueoHasta = ahora + 60000;
+            localStorage.setItem('controlIntentosBanco', JSON.stringify(controlIntentos));
+            alert("⚠️ Has superado el límite de 3 intentos por minuto. El sistema se ha bloqueado temporalmente por 1 minuto.");
+            return;
+        }
 
-            // RESTRICCIÓN: No transferir al mismo producto / número de tarjeta
-            if (numOrigen === numDestino) {
-                alert("⚠️ Restricción aplicada: No puedes transferir fondos a la misma cuenta o producto de origen.");
-                return;
-            }
+        controlIntentos.intentos.push(ahora);
+        localStorage.setItem('controlIntentosBanco', JSON.stringify(controlIntentos));
 
-            const tarjetaOrigen = misTarjetas.find(t => t.numeroTarjeta === numOrigen);
-            const tarjetaDestino = misTarjetas.find(t => t.numeroTarjeta === numDestino);
+        // 4. Validar el código guardado
+        const tokenGuardado = JSON.parse(localStorage.getItem('codigoConsignacionActivo'));
+        console.log("📦 Token guardado en localStorage:", tokenGuardado);
 
-            if (!tarjetaOrigen || !tarjetaDestino) {
-                alert("⚠️ Selecciona cuentas válidas.");
-                return;
-            }
+        if (!tokenGuardado || tokenGuardado.codigo !== codigoIngresado) {
+            alert("❌ Código inválido. Asegúrate de generar y usar un código nuevo que no haya sido validado antes.");
+            return;
+        }
 
-            // VALIDACIÓN: Saldo suficiente (si no es crédito)
-            if (tarjetaOrigen.tipo.toLowerCase() !== 'crédito' && tarjetaOrigen.saldo < monto) {
-                alert(`❌ Fondos insuficientes. Tu cuenta de ${tarjetaOrigen.tipo} tiene un saldo de $${tarjetaOrigen.saldo.toLocaleString()} COP.`);
-                return;
-            }
+        if (ahora > tokenGuardado.expiracion) {
+            alert("❌ El código temporal ha expirado. Genera uno nuevo.");
+            return;
+        }
 
-            if (isNaN(monto) || monto <= 0) {
-                alert("⚠️ Ingresa un monto válido mayor a 0.");
-                return;
-            }
+        console.log("✅ Código validado correctamente. Procediendo a abonar $50,000 COP al backend...");
 
-            try {
-                // Realizar retiro en el origen (esGasto = true)
-                const resOrigen = await fetch(`http://localhost:8080/api/pagos/actualizar-saldo?correo=${encodeURIComponent(correoUsuario)}&numeroTarjeta=${encodeURIComponent(numOrigen)}&monto=${monto}&esGasto=true`, {
-                    method: 'POST'
-                });
+        // 5. Abonar los 50,000 COP obligatorios mediante el backend
+        await aplicarAbonoPorCodigo(50000);
 
-                if (!resOrigen.ok) {
-                    const errorMsg = await resOrigen.text();
-                    alert(`❌ Error en cuenta origen: ${errorMsg}`);
-                    return;
-                }
-
-                // Realizar consignación en el destino (esGasto = false)
-                const resDestino = await fetch(`http://localhost:8080/api/pagos/actualizar-saldo?correo=${encodeURIComponent(correoUsuario)}&numeroTarjeta=${encodeURIComponent(numDestino)}&monto=${monto}&esGasto=false`, {
-                    method: 'POST'
-                });
-
-                if (!resDestino.ok) {
-                    alert("⚠️ Advertencia: Se debitó el origen pero hubo un error acreditando el destino. Contacta soporte.");
-                    return;
-                }
-
-                alert(`🎉 ¡Transferencia exitosa!\n\nSe transfirieron $${monto.toLocaleString()} COP de tu cuenta ${tarjetaOrigen.tipo} hacia tu cuenta ${tarjetaDestino.tipo}.`);
-                window.location.reload(); // Recargar para ver los saldos frescos
-
-            } catch (error) {
-                console.error("Error en la transacción de transferencia", error);
-                alert("⚠️ Error de conexión con el servidor al procesar la transferencia.");
-            }
-        });
-    }
+        // 6. Eliminar el código para que no se pueda repetir
+        localStorage.removeItem('codigoConsignacionActivo');
+    });
 });
+
+// Función auxiliar robusta conectada al MetodoPagoController
+async function aplicarAbonoPorCodigo(montoAbonar) {
+    const correoUsuario = localStorage.getItem('userEmail') || localStorage.getItem('correoUsuario') || localStorage.getItem('correo');
+    console.log("📧 Correo detectado para el abono:", correoUsuario);
+
+    try {
+        const responseTarjetas = await fetch(`http://localhost:8080/api/pagos/tarjetas?correo=${encodeURIComponent(correoUsuario)}`);
+        if (!responseTarjetas.ok) {
+            alert("⚠️ No se encontró ninguna tarjeta activa en el servidor para realizar el abono.");
+            return;
+        }
+        const tarjetas = await responseTarjetas.json();
+        if (!tarjetas || tarjetas.length === 0) {
+            alert("⚠️ El usuario no tiene tarjetas registradas en la base de datos.");
+            return;
+        }
+
+        const tarjetaObjetivo = tarjetas[0];
+        console.log("💳 Tarjeta seleccionada para recibir el abono:", tarjetaObjetivo);
+
+        const urlPeticion = `http://localhost:8080/api/pagos/actualizar-saldo?correo=${encodeURIComponent(correoUsuario)}&tipo=${encodeURIComponent(tarjetaObjetivo.tipo)}&monto=${montoAbonar}&esGasto=false`;
+        console.log("🚀 Enviando POST a:", urlPeticion);
+
+        const responseActualizar = await fetch(urlPeticion, { method: 'POST' });
+
+        if (responseActualizar.ok) {
+            const dataActualizada = await responseActualizar.json();
+            console.log("🎉 Respuesta exitosa del servidor:", dataActualizada);
+            alert(`🎉 ¡Éxito! Se han acreditado $${montoAbonar.toLocaleString()} COP a tu cuenta de ${dataActualizada.tipo}.\nNuevo saldo: $${dataActualizada.saldo.toLocaleString()} COP`);
+            window.location.reload();
+        } else {
+            const mensajeError = await responseActualizar.text();
+            console.error("❌ Error devuelto por el backend:", mensajeError);
+            alert(`❌ Error al actualizar el saldo: ${mensajeError}`);
+        }
+    } catch (e) {
+        console.error("❌ Error crítico de red con el backend:", e);
+        alert("⚠️ Error de conexión con el servidor de pagos.");
+    }
+}
