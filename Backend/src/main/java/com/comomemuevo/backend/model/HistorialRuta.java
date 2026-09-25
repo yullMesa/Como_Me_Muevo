@@ -6,20 +6,21 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "historial_rutas")
 public class HistorialRuta {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Relación ManyToOne con Usuario (usa el UUID heredado de PersonaBase)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    // Relación ManyToOne con Ruta (usa el Long id de Ruta)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ruta_id", nullable = false)
     private Ruta ruta;
+
+    // Nuevo campo para el transporte utilizado
+    @Column(name = "transporte")
+    private String transporte;
 
     @Column(name = "fecha_consulta", nullable = false)
     private LocalDateTime fechaConsulta;
@@ -28,10 +29,24 @@ public class HistorialRuta {
         this.fechaConsulta = LocalDateTime.now();
     }
 
-    public HistorialRuta(Usuario usuario, Ruta ruta) {
+    public HistorialRuta(Usuario usuario, Ruta ruta, String transporte) {
         this.usuario = usuario;
         this.ruta = ruta;
+        this.transporte = transporte;
         this.fechaConsulta = LocalDateTime.now();
+    }
+
+    public HistorialRuta(Usuario usuario, Ruta r) {
+    }
+
+
+    // --- Getters y Setters ---
+    public String getTransporte() {
+        return transporte;
+    }
+
+    public void setTransporte(String transporte) {
+        this.transporte = transporte;
     }
 
     @PrePersist

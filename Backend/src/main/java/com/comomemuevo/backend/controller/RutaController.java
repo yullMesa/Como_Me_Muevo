@@ -48,9 +48,10 @@ public class RutaController {
             if (correo != null) {
                 Usuario usuario = usuarioRepository.findByCorreo(correo);
                 if (usuario != null) {
-                    HistorialRuta historial = new HistorialRuta(usuario, r);
+                    // Le pasamos el transporte al constructor que creamos antes
+                    HistorialRuta historial = new HistorialRuta(usuario, r, transporte);
                     historialRutaRepository.save(historial);
-                    System.out.println("¡Historial guardado exitosamente para el correo: " + correo + "!");
+                    System.out.println("¡Historial guardado exitosamente con transporte: " + transporte + " para el correo: " + correo + "!");
                 }
             }
 
