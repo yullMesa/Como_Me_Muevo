@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LineaRepository extends JpaRepository<Linea, Long> {
+
+    // Agrega esta línea para que Spring Data JPA sepa buscar la línea por su nombre
+    Linea findByNombre(String nombre);
+
 }

@@ -1,0 +1,15 @@
+{
+  "lineas": [
+    { "nombre": "Línea A", "color": "#2563eb" },
+    { "nombre": "Línea B", "color": "#dc2626" },
+    { "nombre": "Metrocable L1", "color": "#16a34a" }
+  ],
+  "estaciones": [
+    { "nombre": "Niquía", "latitud": 6.3407, "longitud": -75.5432, "nombreLinea": "Línea A" },
+    { "nombre": "Bello", "latitud": 6.3312, "longitud": -75.5512, "nombreLinea": "Línea A" },
+    { "nombre": "San Antonio", "latitud": 6.2476, "longitud": -75.5682, "nombreLinea": "Línea A" },
+    { "nombre": "Poblado", "latitud": 6.2131, "longitud": -75.5768, "nombreLinea": "Línea A" },
+    { "nombre": "La Estrella", "latitud": 6.1643, "longitud": -75.6241, "nombreLinea": "Línea A" },
+    { "nombre": "San Javier", "latitud": 6.2523, "longitud": -75.6081, "nombreLinea": "Línea B" }
+  ]
+}

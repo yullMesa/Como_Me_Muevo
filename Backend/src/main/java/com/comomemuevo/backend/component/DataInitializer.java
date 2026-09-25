@@ -1,11 +1,7 @@
 package com.comomemuevo.backend.component;
 
-import com.comomemuevo.backend.model.Incidente;
-import com.comomemuevo.backend.model.Ruta;
-import com.comomemuevo.backend.model.Usuario;
-import com.comomemuevo.backend.repository.IncidenteRepository;
-import com.comomemuevo.backend.repository.RutaRepository;
-import com.comomemuevo.backend.repository.UsuarioRepository;
+import com.comomemuevo.backend.model.*;
+import com.comomemuevo.backend.repository.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +23,13 @@ public class DataInitializer implements CommandLineRunner {
 
     @Autowired
     private IncidenteRepository incidenteRepository;
+
+    // Inyecta los nuevos repositorios arriba en tu clase DataInitializer:
+    @Autowired
+    private LineaRepository lineaRepository;
+
+    @Autowired
+    private EstacionRepository estacionRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -79,6 +82,36 @@ public class DataInitializer implements CommandLineRunner {
                 System.out.println("✅ ¡Incidentes iniciales cargados y vinculados exitosamente!");
             }
         }
+
+        // 0. Cargar Líneas y Estaciones automáticamente si la tabla de estaciones está vacía
+        if (estacionRepository.count() == 0) {
+            InputStream estStream = TypeReference.class.getResourceAsStream("/estaciones-lineas.json");
+            if (estStream != null) {
+                DatosEstacionesDto datos = mapper.readValue(estStream, new TypeReference<DatosEstacionesDto>() {});
+
+                // 1. Guardar Líneas primero
+                for (Linea l : datos.getLineas()) {
+                    // Validar si ya existe por nombre para evitar duplicados
+                    if (lineaRepository.findByNombre(l.getNombre()) == null) {
+                        lineaRepository.save(l);
+                    }
+                }
+
+                // 2. Guardar Estaciones enlazándolas con su línea correspondiente
+                for (EstacionDto estDto : datos.getEstaciones()) {
+                    Linea lineaAsociada = lineaRepository.findByNombre(estDto.getNombreLinea());
+                    if (lineaAsociada != null) {
+                        Estacion estacion = new Estacion();
+                        estacion.setNombre(estDto.getNombre());
+                        estacion.setLatitud(estDto.getLatitud());
+                        estacion.setLongitud(estDto.getLongitud());
+                        estacion.setLinea(lineaAsociada);
+                        estacionRepository.save(estacion);
+                    }
+                }
+                System.out.println("✅ ¡Líneas y estaciones cargadas y vinculadas exitosamente desde JSON!");
+            }
+        }
     }
 
     // DTO auxiliar interno para mapear los incidentes y enlazarlos por correo
@@ -106,5 +139,32 @@ public class DataInitializer implements CommandLineRunner {
         public void setCorreoUsuario(String correoUsuario) { this.correoUsuario = correoUsuario; }
         public Long getEstacionId() { return estacionId; }
         public void setEstacionId(Long estacionId) { this.estacionId = estacionId; }
+    }
+
+    // DTOs auxiliares para leer el JSON combinado de líneas y estaciones
+    public static class DatosEstacionesDto {
+        private List<Linea> lineas;
+        private List<EstacionDto> estaciones;
+
+        public List<Linea> getLineas() { return lineas; }
+        public void setLineas(List<Linea> lineas) { this.lineas = lineas; }
+        public List<EstacionDto> getEstaciones() { return estaciones; }
+        public void setEstaciones(List<EstacionDto> estaciones) { this.estaciones = estaciones; }
+    }
+
+    public static class EstacionDto {
+        private String nombre;
+        private Float latitud;
+        private Float longitud;
+        private String nombreLinea;
+
+        public String getNombre() { return nombre; }
+        public void setNombre(String nombre) { this.nombre = nombre; }
+        public Float getLatitud() { return latitud; }
+        public void setLatitud(Float latitud) { this.latitud = latitud; }
+        public Float getLongitud() { return longitud; }
+        public void setLongitud(Float longitud) { this.longitud = longitud; }
+        public String getNombreLinea() { return nombreLinea; }
+        public void setNombreLinea(String nombreLinea) { this.nombreLinea = nombreLinea; }
     }
 }
