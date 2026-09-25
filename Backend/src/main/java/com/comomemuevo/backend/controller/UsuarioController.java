@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import com.comomemuevo.backend.model.PerfilDTO;
+import java.util.Map;
+import java.util.HashMap;
 
 import java.util.List;
 
@@ -67,6 +69,48 @@ public class UsuarioController {
         perfil.setCiudad("Medellín");
 
         return ResponseEntity.ok(perfil);
+    }
+
+    @PutMapping("/actualizar")
+    public ResponseEntity<?> actualizarUsuario(@RequestBody Map<String, Object> payload) {
+        String correoActual = (String) payload.get("correoActual");
+        if (correoActual == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "No se especificó el usuario actual."));
+        }
+
+        Usuario usuario = usuarioRepository.findByCorreo(correoActual);
+        if (usuario == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String nuevoNombre = (String) payload.get("nombre");
+        String nuevoCorreo = (String) payload.get("correo");
+        String nuevaContrasena = (String) payload.get("contrasena");
+
+        // Actualizar Nombre si viene en la petición
+        if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
+            usuario.setNombre(nuevoNombre);
+        }
+
+        // Actualizar Correo validando que no esté ocupado
+        if (nuevoCorreo != null && !nuevoCorreo.trim().isEmpty()) {
+            Usuario usuarioExistente = usuarioRepository.findByCorreo(nuevoCorreo);
+            if (usuarioExistente != null && !usuarioExistente.getCorreo().equals(correoActual)) {
+                return ResponseEntity.badRequest().body(Map.of("error", "El correo ya está registrado por otro usuario."));
+            }
+            usuario.setCorreo(nuevoCorreo);
+        }
+
+        // Actualizar Contraseña cifrándola con BCrypt
+        if (nuevaContrasena != null && !nuevaContrasena.trim().isEmpty()) {
+            usuario.setContrasena(passwordEncoder.encode(nuevaContrasena));
+        }
+
+        usuarioRepository.save(usuario);
+        return ResponseEntity.ok(Map.of(
+                "mensaje", "¡Perfil actualizado exitosamente!",
+                "nuevoCorreo", usuario.getCorreo()
+        ));
     }
 }
 

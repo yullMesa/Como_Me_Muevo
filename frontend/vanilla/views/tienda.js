@@ -223,16 +223,43 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     };
 
-    window.ejecutarCompraValidada = function() {
+    window.ejecutarCompraValidada = async function() {
         const t = window.tarjetaActivaGlobal;
         const precioProd = productoActual.precio;
+
         if (t.saldo < precioProd) {
             alert(`❌ Fondos insuficientes en la tarjeta seleccionada (${t.tipo}).`);
             return;
         }
-        t.saldo -= precioProd;
-        alert(`🚀 ¡Compra procesada con éxito!\nProducto: ${productoActual.nombre}\nDébitado de (${t.tipo}): ${productoActual.precioFormateado}\nNuevo saldo: $ ${t.saldo.toLocaleString()}`);
-        cerrarModalPago();
+
+        try {
+            // Petición al backend para descontar el saldo de forma real y segura en la BD
+            const response = await fetch(`http://localhost:8080/api/pagos/actualizar-saldo?correo=${encodeURIComponent(correoUsuarioActual)}&tipo=${encodeURIComponent(t.tipo)}&monto=${precioProd}&esGasto=true&cuotas=1`, {
+                method: 'POST'
+            });
+
+            if (!response.ok) {
+                const errorMsg = await response.text();
+                alert(`⚠️ Error al procesar el pago: ${errorMsg}`);
+                return;
+            }
+
+            const tarjetaActualizada = await response.json();
+
+            // Actualizamos el saldo localmente con la respuesta oficial del servidor
+            t.saldo = tarjetaActualizada.saldo;
+
+            alert(`🚀 ¡Compra procesada con éxito!\nProducto: ${productoActual.nombre}\nDebitado de (${t.tipo}): ${productoActual.precioFormateado}\nNuevo saldo: $ ${t.saldo.toLocaleString()}`);
+
+            cerrarModalPago();
+
+            // Opcional: refrescar la vista de productos o tarjetas si es necesario
+            abrirFlujoConAnimacionPalpitante();
+
+        } catch (e) {
+            console.error("Error de red al procesar la compra:", e);
+            alert("❌ Error de conexión al intentar procesar el pago con el servidor.");
+        }
     };
 
     window.cerrarModalPago = function() {
