@@ -143,19 +143,28 @@ class BancoChatBot {
                 this.appendMessage(response.ok ? `🗑️ ${resText}` : `❌ ${resText}`, 'bot');
 
             } else if (action === 'transferir') {
+                const tipoOrigen = prompt("¿Desde qué tarjeta deseas enviar? (Ahorros, Corriente, Crédito):", "Ahorros");
+                if (!tipoOrigen) return;
+
                 const correoDestino = prompt("Ingresa el correo electrónico del usuario destino:");
                 if (!correoDestino || !correoDestino.includes('@')) {
                     this.appendMessage("⚠️ Debes ingresar un correo electrónico válido.", 'bot');
                     return;
                 }
+
+                const tipoDestino = prompt("¿A qué tipo de tarjeta del destinatario deseas abonar? (Ahorros, Corriente, Crédito):", "Ahorros");
+                if (!tipoDestino) return;
+
                 const monto = parseFloat(prompt("Ingresa el monto positivo a transferir en COP:"));
                 if (isNaN(monto) || monto <= 0) {
                     this.appendMessage("❌ Error: El monto a transferir debe ser un número positivo mayor a 0.", 'bot');
                     return;
                 }
-                const response = await fetch(`http://localhost:8080/api/pagos/transferir-externo?correoOrigen=${encodeURIComponent(this.correoUsuario)}&correoDestino=${encodeURIComponent(correoDestino)}&monto=${monto}`, {
+
+                const response = await fetch(`http://localhost:8080/api/pagos/transferir-externo?correoOrigen=${encodeURIComponent(this.correoUsuario)}&correoDestino=${encodeURIComponent(correoDestino)}&monto=${monto}&tipoOrigen=${encodeURIComponent(tipoOrigen)}&tipoDestino=${encodeURIComponent(tipoDestino)}`, {
                     method: 'POST'
                 });
+
                 const resText = await response.text();
                 this.appendMessage(response.ok ? `✅ ${resText}` : `❌ ${resText}`, 'bot');
             }

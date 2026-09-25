@@ -7,9 +7,14 @@ import com.comomemuevo.backend.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping("/api/incidentes")
@@ -53,10 +58,44 @@ public class IncidenteController {
 
             // 4. Guardar en PostgreSQL
             incidenteRepository.save(incidente);
-
             return ResponseEntity.ok(Map.of("mensaje", "¡Reporte guardado exitosamente!"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
+    }
+
+    // 5. Nuevo Endpoint de Server-Sent Events (SSE) para enviar datos pausados al frontend
+    @GetMapping("/stream")
+    public SseEmitter streamIncidentes() {
+        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        executor.execute(() -> {
+            try {
+                List<Incidente> incidentes = incidenteRepository.findAll();
+
+                if (!incidentes.isEmpty()) {
+                    // Enviar los primeros 2 de golpe de manera inmediata
+                    int cantidadInicial = Math.min(2, incidentes.size());
+                    List<Incidente> loteInicial = incidentes.subList(0, cantidadInicial);
+
+                    emitter.send(SseEmitter.event().name("inicial").data(loteInicial));
+
+                    // Enviar el resto de manera pausada cada 6 segundos
+                    for (int i = cantidadInicial; i < incidentes.size(); i++) {
+                        Thread.sleep(6000);
+                        emitter.send(SseEmitter.event().name("nuevo-incidente").data(incidentes.get(i)));
+                    }
+                }
+
+                emitter.complete();
+            } catch (IOException | InterruptedException e) {
+                emitter.completeWithError(e);
+            } finally {
+                executor.shutdown();
+            }
+        });
+
+        return emitter;
     }
 }

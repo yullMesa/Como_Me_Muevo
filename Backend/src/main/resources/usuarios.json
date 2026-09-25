@@ -1,0 +1,32 @@
+[
+  {
+    "nombre": "Carlos Gómez",
+    "correo": "carlos.gomez@admin.com",
+    "contrasena": "$2a$10$sHamqAvHOZO3DEMNcD/y.pK7Raf5yLilbXvETBt8p5blR/RNJ...",
+    "celular": "3001234567"
+  },
+  {
+    "nombre": "Ana María Ruiz",
+    "correo": "ana.ruiz@admin.com",
+    "contrasena": "$2a$10$sHamqAvHOZO3DEMNcD/y.pK7Raf5yLilbXvETBt8p5blR/RNJ...",
+    "celular": "3007654321"
+  },
+  {
+    "nombre": "Felipe Restrepo",
+    "correo": "felipe.restrepo@admin.com",
+    "contrasena": "$2a$10$sHamqAvHOZO3DEMNcD/y.pK7Raf5yLilbXvETBt8p5blR/RNJ...",
+    "celular": "3009876543"
+  },
+  {
+    "nombre": "Lucía Henao",
+    "correo": "lucia.henao@admin.com",
+    "contrasena": "$2a$10$sHamqAvHOZO3DEMNcD/y.pK7Raf5yLilbXvETBt8p5blR/RNJ...",
+    "celular": "3114567890"
+  },
+  {
+    "nombre": "Mateo Cardona",
+    "correo": "mateo.cardona@admin.com",
+    "contrasena": "$2a$10$sHamqAvHOZO3DEMNcD/y.pK7Raf5yLilbXvETBt8p5blR/RNJ...",
+    "celular": "3209871234"
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "tipo": "Demora",
+    "descripcion": "Retraso de 15 minutos en la línea A por alta afluencia de pasajeros en hora pico.",
+    "ubicacionTexto": "Plataforma Norte",
+    "afectacionTráfico": true,
+    "observacionesEmergencia": "Personal operativo regulando el flujo de ingreso.",
+    "correoUsuario": "carlos.gomez@admin.com",
+    "estacionId": 1
+  },
+  {
+    "tipo": "Bloqueo Vial",
+    "descripcion": "Manifestación ciudadana obstaculiza temporalmente el carril exclusivo de alimentadores.",
+    "ubicacionTexto": "Calle 30 con Cra 65",
+    "afectacionTráfico": true,
+    "observacionesEmergencia": "Tránsito de la ciudad desviando rutas alternas.",
+    "correoUsuario": "ana.ruiz@admin.com",
+    "estacionId": 2
+  },
+  {
+    "tipo": "Mantenimiento",
+    "descripcion": "Escaleras eléctricas fuera de servicio temporalmente para revisión preventiva.",
+    "ubicacionTexto": "Acceso Occidental",
+    "afectacionTráfico": false,
+    "observacionesEmergencia": "Técnicos especializados en sitio realizando diagnóstico.",
+    "correoUsuario": "felipe.restrepo@admin.com",
+    "estacionId": 3
+  },
+  {
+    "tipo": "Incidente Menor",
+    "descripcion": "Vehículo particular varado en la zona de integración de rutas zonales.",
+    "ubicacionTexto": "Bahía de parqueo norte",
+    "afectacionTráfico": true,
+    "observacionesEmergencia": "Grúa en camino para liberar la vía principal.",
+    "correoUsuario": "lucia.henao@admin.com",
+    "estacionId": 1
+  },
+  {
+    "tipo": "Seguridad",
+    "descripcion": "Objeto olvidado reportado en zona de bancas. Activación de protocolo preventivo.",
+    "ubicacionTexto": "Concourse Central",
+    "afectacionTráfico": false,
+    "observacionesEmergencia": "Personal de seguridad inspeccionando el área.",
+    "correoUsuario": "mateo.cardona@admin.com",
+    "estacionId": 4
+  },
+  {
+    "tipo": "Demora",
+    "descripcion": "Avería mecánica menor en puerta de vagón, generando retención momentánea.",
+    "ubicacionTexto": "Vía férrea sur",
+    "afectacionTráfico": true,
+    "observacionesEmergencia": "Equipo técnico corrigiendo la falla en plataforma.",
+    "correoUsuario": "carlos.gomez@admin.com",
+    "estacionId": 2
+  }
+]

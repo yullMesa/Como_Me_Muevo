@@ -81,7 +81,9 @@ public class MetodoPagoController {
     public ResponseEntity<?> transferirAOtroUsuario(
             @RequestParam String correoOrigen,
             @RequestParam String correoDestino,
-            @RequestParam double monto) {
+            @RequestParam double monto,
+            @RequestParam(required = false, defaultValue = "Ahorros") String tipoOrigen,
+            @RequestParam(required = false, defaultValue = "Ahorros") String tipoDestino) {
 
         if (monto <= 0) {
             return ResponseEntity.badRequest().body("⚠️ El monto debe ser mayor a 0.");
@@ -101,11 +103,18 @@ public class MetodoPagoController {
             return ResponseEntity.status(400).body("⚠️ Uno de los usuarios no tiene tarjetas o cuentas registradas.");
         }
 
-        MetodoPago cuentaOrigen = tOrigenList.get(0);
-        MetodoPago cuentaDestino = tDestinoList.get(0);
+        MetodoPago cuentaOrigen = tOrigenList.stream()
+                .filter(t -> t.getTipo().equalsIgnoreCase(tipoOrigen.trim()))
+                .findFirst()
+                .orElse(tOrigenList.get(0));
+
+        MetodoPago cuentaDestino = tDestinoList.stream()
+                .filter(t -> t.getTipo().equalsIgnoreCase(tipoDestino.trim()))
+                .findFirst()
+                .orElse(tDestinoList.get(0));
 
         if (!cuentaOrigen.getTipo().equalsIgnoreCase("Crédito") && cuentaOrigen.getSaldo() < monto) {
-            return ResponseEntity.badRequest().body("❌ Fondos insuficientes en la cuenta principal de origen.");
+            return ResponseEntity.badRequest().body("❌ Fondos insuficientes en la cuenta de origen (" + cuentaOrigen.getTipo() + ").");
         }
 
         cuentaOrigen.setSaldo(cuentaOrigen.getSaldo() - monto);
@@ -114,7 +123,7 @@ public class MetodoPagoController {
         metodoPagoRepository.save(cuentaOrigen);
         metodoPagoRepository.save(cuentaDestino);
 
-        return ResponseEntity.ok("🎉 ¡Transferencia enviada con éxito a " + correoDestino + " por valor de $" + monto + " COP!");
+        return ResponseEntity.ok("🎉 ¡Transferencia de $" + monto + " COP desde tu cuenta de " + cuentaOrigen.getTipo() + " hacia la cuenta de " + cuentaDestino.getTipo() + " de " + correoDestino + " realizada con éxito!");
     }
 
     @PostMapping("/actualizar-saldo")
