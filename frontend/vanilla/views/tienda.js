@@ -1,15 +1,157 @@
 import { Warehouse } from '../Warehouse.js';
+
 let productoActual = null;
 const correoUsuarioActual = localStorage.getItem('userEmail') || localStorage.getItem('correoUsuario') || localStorage.getItem('correo');
+
+// --- CLASE CARRITO DE COMPRAS (POO vinculado al correo) ---
+class CarritoCompra {
+    constructor(correo) {
+        this.correo = correo;
+        this.storageKey = `carrito_${correo}`;
+        this.items = this.cargarStorage();
+    }
+
+    cargarStorage() {
+        const data = localStorage.getItem(this.storageKey);
+        return data ? JSON.parse(data) : [];
+    }
+
+    guardarStorage() {
+        localStorage.setItem(this.storageKey, JSON.stringify(this.items));
+    }
+
+    agregar(producto, cantidad = 1) {
+        const cant = parseInt(cantidad) || 1;
+        const index = this.items.findIndex(item => item.producto.id === producto.id);
+        if (index > -1) {
+            this.items[index].cantidad += cant;
+        } else {
+            this.items.push({ producto, cantidad: cant });
+        }
+        this.guardarStorage();
+    }
+
+    actualizarCantidad(idProducto, cantidad) {
+        const cant = parseInt(cantidad);
+        const index = this.items.findIndex(item => item.producto.id === idProducto);
+        if (index > -1) {
+            if (cant <= 0) {
+                this.eliminar(idProducto);
+            } else {
+                this.items[index].cantidad = cant;
+                this.guardarStorage();
+            }
+        }
+    }
+
+    eliminar(idProducto) {
+        this.items = this.items.filter(item => item.producto.id !== idProducto);
+        this.guardarStorage();
+    }
+
+    calcularTotal() {
+        return this.items.reduce((acc, item) => acc + (item.producto.precio * item.cantidad), 0);
+    }
+
+    vaciar() {
+        this.items = [];
+        this.guardarStorage();
+    }
+}
+
+let carritoUsuario = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('gridProductos');
     const menuItems = document.querySelectorAll('.store-nav-item');
+
     if (!correoUsuarioActual) {
         alert("⚠️ Acceso restringido. Debe iniciar sesión con su cuenta para acceder a la tienda y pasarela de pagos.");
         window.location.href = 'Login.html';
         return;
     }
+
+    // Inicializamos el carrito POO del usuario actual
+    carritoUsuario = new CarritoCompra(correoUsuarioActual);
+
+    // Declaración previa de funciones globales del carrito para evitar ReferenceError
+    window.abrirModalCarrito = function() {
+        let modal = document.getElementById('modalCarritoDetalle');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'modalCarritoDetalle';
+            modal.style.cssText = 'display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center; font-family:sans-serif;';
+            document.body.appendChild(modal);
+        }
+
+        const total = carritoUsuario.calcularTotal();
+        let itemsHtml = '';
+
+        if (carritoUsuario.items.length === 0) {
+            itemsHtml = `<p style="color:#9ca3af; text-align:center; padding:20px;">Tu carrito está vacío.</p>`;
+        } else {
+            itemsHtml = carritoUsuario.items.map(item => `
+                <div style="display:flex; justify-content:space-between; align-items:center; background:#111827; padding:10px 14px; border-radius:8px; margin-bottom:8px; border:1px solid #374151;">
+                    <div>
+                        <strong style="font-size:0.9rem; color:#fff; display:block;">${item.producto.nombre}</strong>
+                        <span style="font-size:0.8rem; color:#ef4444;">${item.producto.precioFormateado} c/u</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <input type="number" min="1" value="${item.cantidad}" onchange="cambiarCantidadItemCarrito(${item.producto.id}, this.value)" style="width:45px; text-align:center; background:#374151; color:#fff; border:1px solid #4b5563; border-radius:4px; padding:4px;">
+                        <button onclick="eliminarItemCarrito(${item.producto.id})" style="background:none; border:none; color:#f87171; cursor:pointer; font-size:1rem;" title="Eliminar">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        modal.innerHTML = `
+            <div style="background:#1f2937; color:#fff; width:480px; padding:25px; border-radius:16px; box-shadow:0 15px 35px rgba(0,0,0,0.6); position:relative; border:1px solid #374151;">
+                <button onclick="cerrarModalCarrito()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#9ca3af; font-size:1.2rem; cursor:pointer;">✕</button>
+                <h3 style="margin-top:0; color:#f3f4f6; font-size:1.2rem; border-bottom:1px solid #374151; padding-bottom:10px;">🛒 Carrito de Compras (${correoUsuarioActual})</h3>
+                
+                <div style="max-height:240px; overflow-y:auto; margin:15px 0; padding-right:4px;">
+                    ${itemsHtml}
+                </div>
+
+                <div style="background:#111827; padding:12px; border-radius:8px; border:1px solid #374151; display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <span style="font-size:0.9rem; color:#d1d5db;">Total a Pagar en Tiempo Real:</span>
+                    <span style="font-size:1.1rem; color:#34d399; font-weight:bold;">$ ${total.toLocaleString()}</span>
+                </div>
+
+                <button onclick="pagarCarritoCompleto()" style="width:100%; background:#16a34a; color:white; border:none; padding:10px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.9rem;" ${carritoUsuario.items.length === 0 ? 'disabled style="opacity:0.5; cursor:not-allowed; background:#374151;"' : ''}>Pagar Carrito Completo</button>
+            </div>
+        `;
+        modal.style.display = 'flex';
+    };
+
+    window.cerrarModalCarrito = function() {
+        const modal = document.getElementById('modalCarritoDetalle');
+        if (modal) modal.style.display = 'none';
+    };
+
+    window.cambiarCantidadItemCarrito = function(id, nuevaCantidad) {
+        carritoUsuario.actualizarCantidad(id, nuevaCantidad);
+        actualizarContadorBotonCarrito();
+        window.abrirModalCarrito();
+    };
+
+    window.eliminarItemCarrito = function(id) {
+        carritoUsuario.eliminar(id);
+        actualizarContadorBotonCarrito();
+        window.abrirModalCarrito();
+    };
+
+    window.pagarCarritoCompleto = function() {
+        if (carritoUsuario.items.length === 0) {
+            alert("⚠️ El carrito está vacío.");
+            return;
+        }
+        window.cerrarModalCarrito();
+        abrirFlujoConAnimacionPalpitante(true);
+    };
+
+    crearBotonFlotanteCarrito();
+
     function renderizarProductos(categoria = 'todos') {
         const productos = Warehouse.obtenerProductos(categoria);
         grid.innerHTML = '';
@@ -24,22 +166,32 @@ document.addEventListener('DOMContentLoaded', () => {
                   <h3>${prod.nombre}</h3>
                   <p>${prod.descripcion}</p>
                   <span class="product-price">${prod.precioFormateado}</span>
-                  <button class="btn-agregar-carrito" data-id="${prod.id}">🛒 Comprar ahora</button>
+                  <div style="display:flex; gap:8px; margin-top:10px; align-items:center;">
+                      <input type="number" id="input_cant_${prod.id}" min="1" value="1" style="width:50px; padding:6px; text-align:center; background:#111827; color:#fff; border:1px solid #374151; border-radius:6px; font-size:0.85rem;">
+                      <button class="btn-agregar-carrito" data-id="${prod.id}" style="flex:1; background:#E21B23; color:white; border:none; padding:8px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.85rem;">🛒 Agregar al Carrito</button>
+                  </div>
               </div>
           `;
             grid.appendChild(card);
         });
+
         document.querySelectorAll('.btn-agregar-carrito').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const id = parseInt(e.target.getAttribute('data-id'));
-                productoActual = Warehouse.productos.find(p => p.id === id);
-                abrirFlujoConAnimacionPalpitante();
+                const cantidadInput = document.getElementById(`input_cant_${id}`);
+                const cantidad = parseInt(cantidadInput.value) || 1;
+                const prodEncontrado = Warehouse.productos.find(p => p.id === id);
+
+                if (prodEncontrado) {
+                    carritoUsuario.agregar(prodEncontrado, cantidad);
+                    alert(`✅ ¡${prodEncontrado.nombre} agregado al carrito (x${cantidad})!`);
+                    actualizarContadorBotonCarrito();
+                }
             });
         });
     }
 
-    // 1. Pantalla de carga con la animación palpitante y el logotipo corporativo restaurados
-    async function abrirFlujoConAnimacionPalpitante() {
+    async function abrirFlujoConAnimacionPalpitante(esTotalCarrito = false) {
         let modal = document.getElementById('modalPago');
         if (!modal) {
             modal = document.createElement('div');
@@ -66,14 +218,13 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = 'flex';
         try {
             const response = await fetch(`http://localhost:8080/api/pagos/tarjetas?correo=${encodeURIComponent(correoUsuarioActual)}`);
-            // Si el error es 400, significa que el servidor respondió pero el usuario no tiene tarjetas
             if (response.status === 400) {
-                setTimeout(() => renderizarVentanaDosColumnas([]), 2500);
+                setTimeout(() => renderizarVentanaDosColumnas([], esTotalCarrito), 2500);
                 return;
             }
             if (!response.ok) throw new Error("No tienes ningún tipo de tarjeta dirijase al banco de su preferencia..");
             const tarjetas = await response.json();
-            setTimeout(() => renderizarVentanaDosColumnas(tarjetas), 2000);
+            setTimeout(() => renderizarVentanaDosColumnas(tarjetas, esTotalCarrito), 2000);
         } catch (e) {
             console.error(e);
             modal.innerHTML = `
@@ -86,22 +237,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 2. Ventana de dos columnas con selector dinámico de tarjetas
-    function renderizarVentanaDosColumnas(tarjetas) {
+    function renderizarVentanaDosColumnas(tarjetas, esTotalCarrito = false) {
         const modal = document.getElementById('modalPago');
         window.listaTarjetasGlobal = tarjetas || [];
+        window.esPagoCarritoGlobal = esTotalCarrito;
+
+        const montoPagar = esTotalCarrito ? carritoUsuario.calcularTotal() : (productoActual ? productoActual.precio : 0);
+        const textoTituloResumen = esTotalCarrito ? `🛒 Carrito (${carritoUsuario.items.length} ítems)` : (productoActual ? productoActual.nombre : '');
+        const textoPrecioResumen = `$ ${montoPagar.toLocaleString()}`;
+
         modal.innerHTML = `
           <div style="background:#1f2937; color:#fff; width:780px; padding:25px; border-radius:14px; box-shadow:0 10px 25px rgba(0,0,0,0.4); position:relative; font-family:sans-serif;">
               <button onclick="cerrarModalPago()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#9ca3af; font-size:1.2rem; cursor:pointer;">✕</button>
               <h2 style="margin-top:0; color:#f3f4f6; font-size:1.3rem; border-bottom:1px solid #374151; padding-bottom:10px;">Pasarela de Pago - C.M.M.</h2>
-             
+            
               <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:20px;">
-                 
-                  <!-- COLUMNA IZQUIERDA: SELECCIÓN Y GESTIÓN DE TARJETAS -->
                   <div style="background:#111827; padding:18px; border-radius:10px; border:1px solid #374151; display:flex; flex-direction:column; justify-content:space-between;">
                       <div>
                           <h3 style="font-size:0.95rem; color:#e5e7eb; margin-top:0;">💳 Selecciona tu Tarjeta</h3>
-                         
                           <div id="seccionSelectorTarjeta" style="margin-bottom:15px;">
                               <label style="font-size:0.8rem; display:block; margin-bottom:5px; color:#d1d5db;">Tarjetas asociadas:</label>
                               <select id="selectTarjetaUsuario" onchange="cambiarTarjetaSeleccionada()" style="width:100%; padding:8px; border-radius:6px; background:#374151; color:#fff; border:1px solid #4b5563; font-size:0.85rem;"></select>
@@ -123,12 +276,11 @@ document.addEventListener('DOMContentLoaded', () => {
                           </details>
                       </div>
                   </div>
-                  <!-- COLUMNA DERECHA: RESUMEN Y ACCIÓN DE COMPRA -->
                   <div style="background:#111827; padding:18px; border-radius:10px; border:1px solid #374151; display:flex; flex-direction:column; justify-content:space-between;">
                       <div>
                           <h3 style="font-size:0.95rem; color:#e5e7eb; margin-top:0;">🛒 Resumen de Compra</h3>
-                          <p style="margin:5px 0; font-size:0.9rem;"><strong id="lblProductoNombre">${productoActual.nombre}</strong></p>
-                          <p style="margin:5px 0; font-size:1.1rem; color:#ef4444; font-weight:bold;" id="lblProductoPrecio">${productoActual.precioFormateado}</p>
+                          <p style="margin:5px 0; font-size:0.9rem;"><strong id="lblProductoNombre">${textoTituloResumen}</strong></p>
+                          <p style="margin:5px 0; font-size:1.1rem; color:#ef4444; font-weight:bold;" id="lblProductoPrecio">${textoPrecioResumen}</p>
                           <hr style="border-color:#374151; margin:15px 0;">
                           <div>
                               <p style="font-size:0.85rem; color:#9ca3af; margin:0;">Saldo / Cupo Disponible:</p>
@@ -147,6 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tarjetas = window.listaTarjetasGlobal;
         const select = document.getElementById('selectTarjetaUsuario');
         const secSelector = document.getElementById('seccionSelectorTarjeta');
+
         if (!tarjetas || tarjetas.length === 0) {
             secSelector.style.display = 'none';
             document.getElementById('detalleTarjetaActiva').innerHTML = `<p style="font-size:0.85rem; color:#f87171; margin:0;">No tienes ninguna tarjeta activa. Usa la opción inferior para solicitar una.</p>`;
@@ -170,6 +323,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const index = document.getElementById('selectTarjetaUsuario').value;
         const t = tarjetas[index];
         window.tarjetaActivaGlobal = t;
+        const montoActual = window.esPagoCarritoGlobal ? carritoUsuario.calcularTotal() : (productoActual ? productoActual.precio : 0);
+
         document.getElementById('detalleTarjetaActiva').innerHTML = `
           <p style="margin:3px 0; font-size:0.85rem;"><strong>Tipo:</strong> ${t.tipo}</p>
           <p style="margin:3px 0; font-size:0.85rem;"><strong>Número:</strong> ${t.numeroTarjeta}</p>
@@ -177,7 +332,8 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
         document.getElementById('lblSaldoInfo').innerText = `$ ${t.saldo.toLocaleString()}`;
         const contAccion = document.getElementById('contenedorBotonAccion');
-        if (t.saldo < productoActual.precio) {
+
+        if (t.saldo < montoActual) {
             contAccion.innerHTML = `
               <p style="font-size:0.75rem; color:#f87171; margin-bottom:8px;">⚠️ Saldo insuficiente.</p>
               <button onclick="pedirCodigoConsignacionBackend()" style="width:100%; background:#2563eb; color:white; border:none; padding:8px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.85rem;">Pedir código para consignar dinero</button>
@@ -197,9 +353,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             if (response.ok) {
                 alert(`🎉 ¡Tarjeta de ${tipoSeleccionado} generada y asociada exitosamente!`);
-                abrirFlujoConAnimacionPalpitante();
+                abrirFlujoConAnimacionPalpitante(window.esPagoCarritoGlobal);
             } else {
-                alert(`⚠️ Restricción: No se pudo emitir la tarjeta (es posible que ya posea una del mismo tipo o aplique restricción de tiempo).`);
+                alert(`⚠️ Restricción: No se pudo emitir la tarjeta.`);
             }
         } catch (e) {
             alert("Error de red al solicitar la tarjeta.");
@@ -225,37 +381,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.ejecutarCompraValidada = async function() {
         const t = window.tarjetaActivaGlobal;
-        const precioProd = productoActual.precio;
+        const esCarrito = window.esPagoCarritoGlobal;
+        const montoTotal = esCarrito ? carritoUsuario.calcularTotal() : (productoActual ? productoActual.precio : 0);
 
-        if (t.saldo < precioProd) {
+        if (t.saldo < montoTotal) {
             alert(`❌ Fondos insuficientes en la tarjeta seleccionada (${t.tipo}).`);
             return;
         }
 
         try {
-            // Petición al backend para descontar el saldo de forma real y segura en la BD
-            const response = await fetch(`http://localhost:8080/api/pagos/actualizar-saldo?correo=${encodeURIComponent(correoUsuarioActual)}&tipo=${encodeURIComponent(t.tipo)}&monto=${precioProd}&esGasto=true&cuotas=1`, {
+            const response = await fetch(`http://localhost:8080/api/pagos/actualizar-saldo?correo=${encodeURIComponent(correoUsuarioActual)}&tipo=${encodeURIComponent(t.tipo)}&monto=${montoTotal}&esGasto=true&cuotas=1`, {
                 method: 'POST'
             });
-
             if (!response.ok) {
                 const errorMsg = await response.text();
                 alert(`⚠️ Error al procesar el pago: ${errorMsg}`);
                 return;
             }
-
             const tarjetaActualizada = await response.json();
-
-            // Actualizamos el saldo localmente con la respuesta oficial del servidor
             t.saldo = tarjetaActualizada.saldo;
 
-            alert(`🚀 ¡Compra procesada con éxito!\nProducto: ${productoActual.nombre}\nDebitado de (${t.tipo}): ${productoActual.precioFormateado}\nNuevo saldo: $ ${t.saldo.toLocaleString()}`);
+            if (esCarrito) {
+                alert(`🚀 ¡Compra del carrito procesada con éxito!\nDebitado: $ ${montoTotal.toLocaleString()}\nNuevo saldo: $ ${t.saldo.toLocaleString()}`);
+                carritoUsuario.vaciar();
+                actualizarContadorBotonCarrito();
+                window.cerrarModalCarrito();
+            } else {
+                alert(`🚀 ¡Compra procesada con éxito!\nProducto: ${productoActual.nombre}\nNuevo saldo: $ ${t.saldo.toLocaleString()}`);
+            }
 
-            cerrarModalPago();
-
-            // Opcional: refrescar la vista de productos o tarjetas si es necesario
-            abrirFlujoConAnimacionPalpitante();
-
+            window.cerrarModalPago();
         } catch (e) {
             console.error("Error de red al procesar la compra:", e);
             alert("❌ Error de conexión al intentar procesar el pago con el servidor.");
@@ -266,6 +421,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById('modalPago');
         if (modal) modal.style.display = 'none';
     };
+
+    function crearBotonFlotanteCarrito() {
+        if (document.getElementById('btnFlotanteCarrito')) return;
+        const btn = document.createElement('button');
+        btn.id = 'btnFlotanteCarrito';
+        btn.innerHTML = `🛒 Carrito <span id="badgeCarritoCount" style="background:#E21B23; color:#fff; padding:2px 6px; border-radius:50%; font-size:0.75rem; margin-left:4px;">${carritoUsuario.items.reduce((acc, i) => acc + i.cantidad, 0)}</span>`;
+        btn.style.cssText = 'position:fixed; bottom:25px; right:25px; background:#111827; color:#fff; border:2px solid #374151; padding:12px 20px; border-radius:30px; font-weight:bold; cursor:pointer; z-index:999; box-shadow:0 6px 20px rgba(0,0,0,0.5); font-family:sans-serif; display:flex; align-items:center;';
+        btn.onclick = window.abrirModalCarrito;
+        document.body.appendChild(btn);
+    }
+
+    function actualizarContadorBotonCarrito() {
+        const badge = document.getElementById('badgeCarritoCount');
+        if (badge) {
+            badge.textContent = carritoUsuario.items.reduce((acc, i) => acc + i.cantidad, 0);
+        }
+    }
 
     menuItems.forEach(item => {
         item.addEventListener('click', (e) => {

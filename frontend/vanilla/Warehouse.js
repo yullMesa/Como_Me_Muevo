@@ -1,118 +1,123 @@
+// --- CLASE BASE (Superclase) ---
+export class Producto {
+    constructor(id, nombre, descripcion, precio, stock, imagen, fallbackIcon, categoria) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.precioFormateado = `$ ${precio.toLocaleString()}`;
+        this.stock = stock;
+        this.imagen = imagen;
+        this.fallbackIcon = fallbackIcon;
+        this.categoria = categoria;
+    }
+
+    mostrarInfo() {
+        return `${this.nombre} - ${this.precioFormateado}`;
+    }
+}
+
+// --- CLASES HEREDADAS (Polimorfismo) ---
+export class Laptop extends Producto {
+    constructor(id, nombre, descripcion, precio, stock, imagen, fallbackIcon, categoria, procesador, ram, almacenamiento) {
+        super(id, nombre, descripcion, precio, stock, imagen, fallbackIcon, categoria);
+        this.procesador = procesador;
+        this.ram = ram;
+        this.almacenamiento = almacenamiento;
+    }
+
+    mostrarInfo() {
+        return `[Laptop] ${super.mostrarInfo()} | CPU: ${this.procesador}, RAM: ${this.ram}`;
+    }
+}
+
+export class Smartphone extends Producto {
+    constructor(id, nombre, descripcion, precio, stock, imagen, fallbackIcon, categoria, sistemaOperativo, tamanoPantalla, camara) {
+        super(id, nombre, descripcion, precio, stock, imagen, fallbackIcon, categoria);
+        this.sistemaOperativo = sistemaOperativo;
+        this.tamanoPantalla = tamanoPantalla;
+        this.camara = camara;
+    }
+
+    mostrarInfo() {
+        return `[Smartphone] ${super.mostrarInfo()} | OS: ${this.sistemaOperativo}, Pantalla: ${this.tamanoPantalla}`;
+    }
+}
+
+export class Accesorio extends Producto {
+    constructor(id, nombre, descripcion, precio, stock, imagen, fallbackIcon, categoria, tipoAccesorio) {
+        super(id, nombre, descripcion, precio, stock, imagen, fallbackIcon, categoria);
+        this.tipoAccesorio = tipoAccesorio;
+    }
+
+    mostrarInfo() {
+        return `[Accesorio] ${super.mostrarInfo()} | Tipo: ${this.tipoAccesorio}`;
+    }
+}
+
+// --- CLASE GESTOR DEL CARRITO DE COMPRAS ---
+export class CarritoCompra {
+    constructor(correoUsuario) {
+        this.correoUsuario = correoUsuario;
+        // Carga el carrito específico de este usuario desde localStorage
+        const guardado = localStorage.getItem(`carrito_${correoUsuario}`);
+        this.items = guardado ? JSON.parse(guardado) : [];
+    }
+
+    sincronizarStorage() {
+        localStorage.setItem(`carrito_${this.correoUsuario}`, JSON.stringify(this.items));
+    }
+
+    agregarProducto(producto, cantidad = 1) {
+        const cantInt = parseInt(cantidad);
+        const index = this.items.findIndex(item => item.producto.id === producto.id);
+        if (index > -1) {
+            this.items[index].cantidad += cantInt;
+        } else {
+            this.items.push({ producto, cantidad: cantInt });
+        }
+        this.sincronizarStorage();
+    }
+
+    actualizarCantidad(idProducto, cantidad) {
+        const index = this.items.findIndex(item => item.producto.id === idProducto);
+        if (index > -1) {
+            const nuevaCantidad = parseInt(cantidad);
+            if (nuevaCantidad <= 0) {
+                this.eliminarProducto(idProducto);
+            } else {
+                this.items[index].cantidad = nuevaCantidad;
+                this.sincronizarStorage();
+            }
+        }
+    }
+
+    eliminarProducto(idProducto) {
+        this.items = this.items.filter(item => item.producto.id !== idProducto);
+        this.sincronizarStorage();
+    }
+
+    calcularTotal() {
+        return this.items.reduce((acc, item) => acc + (item.producto.precio * item.cantidad), 0);
+    }
+
+    vaciar() {
+        this.items = [];
+        this.sincronizarStorage();
+    }
+}
+
+// --- WAREHOUSE / CATÁLOGO ---
 export const Warehouse = {
     productos: [
-        // --- CATEGORÍA: PASAJES Y CÍVICA ---
-        {
-            id: 1,
-            nombre: "Carga Cívica Estándar",
-            categoria: "pasajes",
-            precio: 3200,
-            precioFormateado: "$ 3.200",
-            descripcion: "Recarga inmediata para tu tarjeta Cívica al sistema integrado de transporte.",
-            imagen: "../Style/image/comopago.png", // <--- 📌 AQUÍ PONES LA IMAGEN 1
-            fallbackIcon: "💳"
-        },
-        {
-            id: 2,
-            nombre: "Paquete x10 Pasajes Integrados",
-            categoria: "pasajes",
-            precio: 30000,
-            precioFormateado: "$ 30.000",
-            descripcion: "Ahorra tiempo y dinero con este paquete prepagado de 10 viajes urbanos.",
-            imagen: "../Style/image/comoloquiero.png", // <--- 📌 AQUÍ PONES LA IMAGEN 2
-            fallbackIcon: "🎟️"
-        },
-        {
-            id: 3,
-            nombre: "Carga Cívica + Pasaje Estudiantil",
-            categoria: "pasajes",
-            precio: 2400,
-            precioFormateado: "$ 2.400",
-            descripcion: "Tarifa preferencial especial para estudiantes debidamente acreditados.",
-            imagen: "../Style/image/ilustracion.png", // <--- 📌 AQUÍ PONES LA IMAGEN 3
-            fallbackIcon: "🎓"
-        },
-
-        // --- CATEGORÍA: SERVICIOS DE MOVILIDAD ---
-        {
-            id: 4,
-            nombre: "Membresía Mensual EnCicla",
-            categoria: "servicios",
-            precio: 15000,
-            precioFormateado: "$ 15.000",
-            descripcion: "Acceso prioritario y extensión de tiempo en el préstamo de bicicletas públicas.",
-            imagen: "../Style/image/background.jpg", // <--- 📌 AQUÍ PONES LA IMAGEN 4
-            fallbackIcon: "🚲"
-        },
-        {
-            id: 5,
-            nombre: "Pase Exprés Metrocable Línea L",
-            categoria: "servicios",
-            precio: 5000,
-            precioFormateado: "$ 5.000",
-            descripcion: "Acceso rápido y sin filas para turistas o viajes de conexión hacia Arví.",
-            imagen: "../Style/image/comopago.png", // <--- 📌 AQUÍ PONES LA IMAGEN 5
-            fallbackIcon: "🚡"
-        },
-        {
-            id: 6,
-            nombre: "Seguro Diario de Viajero C.M.M.",
-            categoria: "servicios",
-            precio: 1000,
-            precioFormateado: "$ 1.000",
-            descripcion: "Póliza de cobertura contra accidentes durante tus trayectos diarios en la red.",
-            imagen: "../Style/image/comoloquiero.png", // <--- 📌 AQUÍ PONES LA IMAGEN 6
-            fallbackIcon: "🛡️"
-        },
-
-        // --- CATEGORÍA: ACCESORIOS Y MERCHANDISING ---
-        {
-            id: 7,
-            nombre: "Protector de silicona para Cívica",
-            categoria: "accesorios",
-            precio: 8500,
-            precioFormateado: "$ 8.500",
-            descripcion: "Funda protectora con llavero para evitar daños en el chip de tu tarjeta.",
-            imagen: "../Style/image/ilustracion.png", // <--- 📌 AQUÍ PONES LA IMAGEN 7
-            fallbackIcon: "🔑"
-        },
-        {
-            id: 8,
-            nombre: "Botilitro Metálico '¿Cómo me muevo?'",
-            categoria: "accesorios",
-            precio: 22000,
-            precioFormateado: "$ 22.000",
-            descripcion: "Termo de acero inoxidable edición especial eco-amigable de la ciudad.",
-            imagen: "../Style/image/background.jpg", // <--- 📌 AQUÍ PONES LA IMAGEN 8
-            fallbackIcon: "🥤"
-        },
-        {
-            id: 9,
-            nombre: "Impermeable de Bolsillo C.M.M.",
-            categoria: "accesorios",
-            precio: 6000,
-            precioFormateado: "$ 6.000",
-            descripcion: "Ideal para los chaparrones imprevistos en las tardes de Medellín.",
-            imagen: "../Style/image/comopago.png", // <--- 📌 AQUÍ PONES LA IMAGEN 9
-            fallbackIcon: "🧥"
-        },
-
-        // --- CATEGORÍA: BENEFICIOS Y OTROS ---
-        {
-            id: 10,
-            nombre: "Bono Descuento Aliados Comerciales",
-            categoria: "beneficios",
-            precio: 0,
-            precioFormateado: "GRATIS",
-            descripcion: "Cupón de 20% en librerías y cafés locales usando puntos de movilidad.",
-            imagen: "../Style/image/comoloquiero.png", // <--- 📌 AQUÍ PONES LA IMAGEN 10
-            fallbackIcon: "🎁"
-        }
+        new Laptop(1, "Laptop Lenovo IdeaPad", "Ideal برای desarrollo y software, 8GB RAM, SSD 256GB.", 2400000, 10, "../Style/image/comopago.png", "💻", "servicios", "Intel Core i5", "8GB", "256GB SSD"),
+        new Smartphone(2, "Smartphone Xiaomi Redmi", "Pantalla de 6.5 pulgadas y cámara de alta resolución.", 850000, 15, "../Style/image/comoloquiero.png", "📱", "servicios", "Android 13", "6.5''", "48 MP"),
+        new Accesorio(3, "Carga Cívica Estándar", "Recarga inmediata para tu tarjeta Cívica de transporte.", 3200, 100, "../Style/image/ilustracion.png", "💳", "pasajes", "Tarjeta de Transporte"),
+        new Accesorio(4, "Protector de silicona Cívica", "Funda protectora con llavero para evitar daños en el chip.", 8500, 40, "../Style/image/background.jpg", "🔑", "accesorios", "Protector")
     ],
 
     obtenerProductos(categoria = 'todos') {
-        if (categoria === 'todos') {
-            return this.productos;
-        }
+        if (categoria === 'todos') return this.productos;
         return this.productos.filter(p => p.categoria === categoria);
     }
 };
