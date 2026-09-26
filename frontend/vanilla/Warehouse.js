@@ -1,57 +1,118 @@
-// Warehouse.js - Almacén de datos y lógica de pago para la Tienda
-
 export const Warehouse = {
     productos: [
+        // --- CATEGORÍA: PASAJES Y CÍVICA ---
         {
             id: 1,
-            nombre: "Tarjeta de movilidad",
-            descripcion: "Tarjeta recargable para el sistema Metro y transporte integrado.",
-            precio: 25000,
-            precioFormateado: "$ 25.000",
-            categoria: "recargas",
-            imagen: "../Style/image/tarjeta_icon.png",
+            nombre: "Carga Cívica Estándar",
+            categoria: "pasajes",
+            precio: 3200,
+            precioFormateado: "$ 3.200",
+            descripcion: "Recarga inmediata para tu tarjeta Cívica al sistema integrado de transporte.",
+            imagen: "../Style/image/comopago.png", // <--- 📌 AQUÍ PONES LA IMAGEN 1
             fallbackIcon: "💳"
         },
         {
             id: 2,
-            nombre: "Botella de agua",
-            descripcion: "Mantén tu hidratación en cada trayecto, 600 ml.",
-            precio: 35000,
-            precioFormateado: "$ 35.000",
-            categoria: "accesorios",
-            imagen: "../Style/image/botella_icon.png",
-            fallbackIcon: "💧"
+            nombre: "Paquete x10 Pasajes Integrados",
+            categoria: "pasajes",
+            precio: 30000,
+            precioFormateado: "$ 30.000",
+            descripcion: "Ahorra tiempo y dinero con este paquete prepagado de 10 viajes urbanos.",
+            imagen: "../Style/image/comoloquiero.png", // <--- 📌 AQUÍ PONES LA IMAGEN 2
+            fallbackIcon: "🎟️"
         },
         {
             id: 3,
-            nombre: "Gorra corporativa",
-            descripcion: "Estilo y comodidad para tus recorridos por la ciudad.",
-            precio: 45000,
-            precioFormateado: "$ 45.000",
-            categoria: "ropa",
-            imagen: "../Style/image/gorra_icon.png",
-            fallbackIcon: "🧢"
+            nombre: "Carga Cívica + Pasaje Estudiantil",
+            categoria: "pasajes",
+            precio: 2400,
+            precioFormateado: "$ 2.400",
+            descripcion: "Tarifa preferencial especial para estudiantes debidamente acreditados.",
+            imagen: "../Style/image/ilustracion.png", // <--- 📌 AQUÍ PONES LA IMAGEN 3
+            fallbackIcon: "🎓"
         },
+
+        // --- CATEGORÍA: SERVICIOS DE MOVILIDAD ---
         {
             id: 4,
-            nombre: "Bolsa ecológica",
-            descripcion: "Lleva lo que necesitas con la identidad de la app.",
-            precio: 28000,
-            precioFormateado: "$ 28.000",
-            categoria: "souvenirs",
-            imagen: "../Style/image/bolsa_icon.png",
-            fallbackIcon: "👜"
+            nombre: "Membresía Mensual EnCicla",
+            categoria: "servicios",
+            precio: 15000,
+            precioFormateado: "$ 15.000",
+            descripcion: "Acceso prioritario y extensión de tiempo en el préstamo de bicicletas públicas.",
+            imagen: "../Style/image/background.jpg", // <--- 📌 AQUÍ PONES LA IMAGEN 4
+            fallbackIcon: "🚲"
+        },
+        {
+            id: 5,
+            nombre: "Pase Exprés Metrocable Línea L",
+            categoria: "servicios",
+            precio: 5000,
+            precioFormateado: "$ 5.000",
+            descripcion: "Acceso rápido y sin filas para turistas o viajes de conexión hacia Arví.",
+            imagen: "../Style/image/comopago.png", // <--- 📌 AQUÍ PONES LA IMAGEN 5
+            fallbackIcon: "🚡"
+        },
+        {
+            id: 6,
+            nombre: "Seguro Diario de Viajero C.M.M.",
+            categoria: "servicios",
+            precio: 1000,
+            precioFormateado: "$ 1.000",
+            descripcion: "Póliza de cobertura contra accidentes durante tus trayectos diarios en la red.",
+            imagen: "../Style/image/comoloquiero.png", // <--- 📌 AQUÍ PONES LA IMAGEN 6
+            fallbackIcon: "🛡️"
+        },
+
+        // --- CATEGORÍA: ACCESORIOS Y MERCHANDISING ---
+        {
+            id: 7,
+            nombre: "Protector de silicona para Cívica",
+            categoria: "accesorios",
+            precio: 8500,
+            precioFormateado: "$ 8.500",
+            descripcion: "Funda protectora con llavero para evitar daños en el chip de tu tarjeta.",
+            imagen: "../Style/image/ilustracion.png", // <--- 📌 AQUÍ PONES LA IMAGEN 7
+            fallbackIcon: "🔑"
+        },
+        {
+            id: 8,
+            nombre: "Botilitro Metálico '¿Cómo me muevo?'",
+            categoria: "accesorios",
+            precio: 22000,
+            precioFormateado: "$ 22.000",
+            descripcion: "Termo de acero inoxidable edición especial eco-amigable de la ciudad.",
+            imagen: "../Style/image/background.jpg", // <--- 📌 AQUÍ PONES LA IMAGEN 8
+            fallbackIcon: "🥤"
+        },
+        {
+            id: 9,
+            nombre: "Impermeable de Bolsillo C.M.M.",
+            categoria: "accesorios",
+            precio: 6000,
+            precioFormateado: "$ 6.000",
+            descripcion: "Ideal para los chaparrones imprevistos en las tardes de Medellín.",
+            imagen: "../Style/image/comopago.png", // <--- 📌 AQUÍ PONES LA IMAGEN 9
+            fallbackIcon: "🧥"
+        },
+
+        // --- CATEGORÍA: BENEFICIOS Y OTROS ---
+        {
+            id: 10,
+            nombre: "Bono Descuento Aliados Comerciales",
+            categoria: "beneficios",
+            precio: 0,
+            precioFormateado: "GRATIS",
+            descripcion: "Cupón de 20% en librerías y cafés locales usando puntos de movilidad.",
+            imagen: "../Style/image/comoloquiero.png", // <--- 📌 AQUÍ PONES LA IMAGEN 10
+            fallbackIcon: "🎁"
         }
     ],
 
-    metodosPago: [
-        { id: "credito", nombre: "Tarjeta de Crédito", icono: "💳", descripcion: "Pago diferido o a una cuota" },
-        { id: "debito", nombre: "Tarjeta Débito", icono: "🏦", descripcion: "Débito directo de tus fondos" },
-        { id: "corriente", nombre: "Cuenta Corriente", icono: "📄", descripcion: "Cargo autorizado a cuenta bancaria" }
-    ],
-
-    obtenerProductos(categoria = "todos") {
-        if (categoria === "todos") return this.productos;
+    obtenerProductos(categoria = 'todos') {
+        if (categoria === 'todos') {
+            return this.productos;
+        }
         return this.productos.filter(p => p.categoria === categoria);
     }
 };

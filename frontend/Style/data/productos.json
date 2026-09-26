@@ -1,0 +1,18 @@
+[
+  {
+    "nombre": "Cargar Cívica + Pasaje Estudiantil",
+    "imagen": "Style/image/comopago.png"
+  },
+  {
+    "nombre": "Cómo lo quiero - Tarjeta Principal",
+    "imagen": "Style/image/comoloquiero.png"
+  },
+  {
+    "nombre": "Ilustración de Movilidad",
+    "imagen": "Style/image/ilustracion.png"
+  },
+  {
+    "nombre": "Background de Ruta Interactiva",
+    "imagen": "Style/image/background.jpg"
+  }
+]
