@@ -73,7 +73,7 @@ body.signup-body {
     padding: 30px 40px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Alinea hacia arriba para no empujar campos fuera */
+    justify-content: center;
     background-color: var(--blanco);
     overflow-y: auto; /* Scroll dentro del formulario si los campos exceden el alto */
     position: relative;
